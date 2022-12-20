@@ -2,12 +2,16 @@ package Textures.Example1;
 
 import Textures.AnimListener;
 import Textures.TextureReader;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Iterator;
+
 /*
 ali yasser
 generateEnemies
@@ -16,7 +20,6 @@ moveEnemies
 */
 
 public class AnimGLEventListener extends AnimListener {
-
     private static final int DI = 110;
     private static final int DJ = 110;
     private static final int MAX_ENEMIES = 1;
@@ -26,22 +29,21 @@ public class AnimGLEventListener extends AnimListener {
     private final int bulletIndex = 4;
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
-    double[] bulletX = new double[50];
-    double[] bulletY = new double[50];
-    int currBullet = 0;
-
+    plane1 plane = new plane1();
     //--------------------------------------------------------------------------------------//
     int maxWidth = 10;
     int maxHeight = 100;
-    int stop1 = 0,stop2 = 0;
-    String[] textureNames = {"plane_1.png", "plane_2.png", "plane_3.png", "plane_boom.png", "bullet.png", "boat1.png", "boat2.png"};
+    int stop1 = 0;
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), new plane1().getBulletPic(), "boat1.png", "boat2.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
+    ArrayList<Bullet> bullets = new ArrayList<>();
+    private long lastBulletFired = 0;
+    private long fireRate = 500;
     private double planeXposition = maxWidth / 2;
     private double planeYposition = 10;
     private int animationIndex = 0;
-    //
-    private double rightXPlaneBoundry = 9, leftXPlaneBoundry = .5;
+    private double rightXPlaneBoundry = 9, leftXPlaneBoundry = 0;
 
     public AnimGLEventListener() {
 
@@ -49,15 +51,10 @@ public class AnimGLEventListener extends AnimListener {
 
     //            main method
     public static void main(String[] args) {
-        new Anim(new AnimGLEventListener());
-
+//        new Anim(new AnimGLEventListener1());
 
     }
 
-    /*
-     5 means gun in array pos
-     x and y coordinate for gun
-     */
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         //This Will Clear The Background Color To Blue
@@ -91,42 +88,17 @@ public class AnimGLEventListener extends AnimListener {
         handleKeyPress();
         moveEnemies();
         moveBullets();
-//        drowBullets(gl);
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //genarate enemies after 1sec
         if (stop1-- == 0)
             generateEnemies();
         drowEnemies(gl);
-        for (int i = 0; i < 50; i++) {
-            if (bulletX[i] == 0 && bulletY[i] == 0)
-                break;
-            bulletY[i]++;
-            drowBullet(gl, bulletX[i], bulletY[i], 1);
-        }
-        handleBulletPress();
-
-
-
-//        gl.glColor3f(1,1,1);
-//        gl.glBegin(GL.GL_POLYGON);
-//        gl.glVertex2d(0,0);
-//        gl.glVertex2d(0,1);
-//        gl.glVertex2d(1,1);
-//        gl.glVertex2d(1,0);
-//        gl.glEnd();
-
+        generateBullets(gl);
+        removeBullets();
+        System.out.println(bullets.size());
 
 
     }
-
-    private void moveBullets() {
-        for (int i = 0; i < 50; i++) {
-            if (bulletX[i] == 0 && bulletY[i] == 0)
-                break;
-            bulletY[i]++;
-        }
-    }
-
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
@@ -136,23 +108,36 @@ public class AnimGLEventListener extends AnimListener {
 
     private void moveEnemies() {
         for (int i = 0; i < DI; i++) {
-            for (int j = 0; j < DJ; j++) {
+            for (int j = 1; j < DJ; j++) {
                 if (entity[i][j] == 2) {
                     entity[i][j] = 0;
-                    entity[i][j - 4] = 2;
-                    enemiesDirection[i][j - 4] = enemiesDirection[i][j];
+                    entity[i][j - 1] = 2;
+                    enemiesDirection[i][j - 1] = enemiesDirection[i][j];
                     enemiesDirection[i][j] = 0;
                 }
             }
         }
-
-
         for (int j = 0; j < DJ; j++) {
             if (entity[j][0] == 2) {
                 entity[j][0] = 0;
             }
         }
     }
+    private void moveBullets() {
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).y += 2;
+        }
+    }
+    private void removeBullets() {
+        Iterator itr = bullets.iterator();
+
+        while (itr.hasNext()) {
+            Bullet b = (Bullet) itr.next();
+            if (!b.fired)
+                itr.remove();
+        }
+    }
+
 
     private void generateEnemies() {
         int y = 0;
@@ -163,12 +148,19 @@ public class AnimGLEventListener extends AnimListener {
             entity[x][y] = 2;
             int random = (int) ((Math.random() * 2) + 1);
             enemiesDirection[x][y] = random;
-            stop1 = 1;
+            stop1 = 4;
         }
 
     }
+    //                         drow methods
 
+    private void generateBullets(GL gl) {
+        for (Bullet bullet : bullets) {
+            bullet.invalidate();
+            drowBullet(gl, bullet.x, bullet.y, 1);
+        }
 
+    }
 
 
     private void drowEnemies(GL gl) {
@@ -185,10 +177,8 @@ public class AnimGLEventListener extends AnimListener {
             }
         }
     }
-    //                         drow methods
 
     private void drowSpriteEnemy(GL gl, int x, int y) {
-
         drawSprite(gl, x, y, texture.length - enemiesDirection[x][y], 1);
 
     }
@@ -218,7 +208,7 @@ public class AnimGLEventListener extends AnimListener {
         gl.glDisable(GL.GL_BLEND);
     }
 
-    private void drowBullet( GL gl, double x, double y, float scale) {
+    private void drowBullet(GL gl, double x, double y, float scale) {
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[bulletIndex]);    // Turn Blending On
         gl.glPushMatrix();
@@ -242,49 +232,35 @@ public class AnimGLEventListener extends AnimListener {
     // handel palne movement
     public void handleKeyPress() {
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
-            System.out.println("left");
             animationIndex = 2;
             if (planeXposition > leftXPlaneBoundry)
-                planeXposition -= .7;
+                planeXposition -= plane.getPlaneSpeed();
         } else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
-            System.out.println("right");
-            System.out.println(planeXposition);
             animationIndex = 1;
             if (planeXposition < rightXPlaneBoundry)
-                planeXposition += .7;
+                planeXposition += plane.getPlaneSpeed();
             if (planeXposition > 9)
                 planeXposition = 9;
         }
-
-            System.out.println(stop2);
-
+        if (isKeyPressed(KeyEvent.VK_SPACE)) {
+            if (lastBulletFired + fireRate < System.currentTimeMillis()) {
+                lastBulletFired = System.currentTimeMillis();
+                bullets.add(new Bullet(planeXposition, planeYposition, 1100));
+            }
         }
 
 
+    }
+
+    //
     /*
      * KeyListener
      */
-    // disable space key for time
-    private void handleBulletPress(){
-        if (stop2>0)
-            stop2-=.1;
-//                break;
 
-        System.out.println(stop2);
-        if (stop2==0&&isKeyPressed(KeyEvent.VK_SPACE)) {
-            bulletX[currBullet] = planeXposition;
-            bulletY[currBullet] = planeYposition + 4;
-            currBullet++;
-            currBullet %= 50;
-            stop2=3;
-        }
 
-    }
     @Override
     public void keyPressed(final KeyEvent event) {
         int keyCode = event.getKeyCode();
-//        if (keyCode==KeyEvent.VK_SPACE)
-//            stop2=10;
         keyBits.set(keyCode);
     }
 
@@ -297,7 +273,6 @@ public class AnimGLEventListener extends AnimListener {
 
     @Override
     public void keyTyped(final KeyEvent event) {
-        // don't care
     }
 
     public boolean isKeyPressed(final int keyCode) {
