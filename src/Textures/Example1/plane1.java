@@ -1,29 +1,18 @@
 package Textures.Example1;
 
-public class plane {
-    //x position & y position  & the assets for plane
-    public double xPosition ;
-    public double yPosition ;
+public class plane1 {
     private final String firstPic="plane_1.png";
     private final String secendPic="plane_2.png";
     private final String triedPic="plane_3.png";
+    private final double planeSpeed = .1;
 
     private final   String planeBoomed="plane_boom.png";
 
-    private final String bulletPic="";
+    private final String bulletPic="bullet.png";
 
-    public plane() {
+    public plane1() {
 
     }
-
-    public double getxPosition() {
-        return xPosition;
-    }
-
-    public double getyPosition() {
-        return yPosition;
-    }
-
     public String getBulletPic() {
         return bulletPic;
     }
@@ -39,11 +28,9 @@ public class plane {
     public String getTriedPic() {
         return triedPic;
     }
-    public void setxPosition(double xPosition) {
-        this.xPosition = xPosition;
-    }
+    public String getPlaneBoomed(){return planeBoomed;}
 
-    public void setyPosition(double yPosition) {
-        this.yPosition = yPosition;
+    public double getPlaneSpeed() {
+        return planeSpeed;
     }
 }
