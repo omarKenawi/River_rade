@@ -129,9 +129,9 @@ public class AnimGLEventListener extends AnimListener {
             lastEneny = System.currentTimeMillis();
             Enemies.add(new Enemies(Math.random()*8,0,1700));
         }
-        for (Enemies bullet : Enemies) {
-            bullet.validate();
-            drawSprite(gl, bullet.x, bullet.y,(int)Math.random()+5, 1);
+        for (Enemies enemies : Enemies) {
+            enemies.validate();
+            drawSprite(gl, enemies.x, enemies.y,(int)Math.random()+5, 1);
         }
 
 
