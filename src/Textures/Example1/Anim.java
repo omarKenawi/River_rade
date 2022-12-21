@@ -18,12 +18,13 @@ public class Anim extends JFrame {
     public Anim(AnimListener aListener) {
         GLCanvas glcanvas;
         Animator animator;
+
         AnimListener listener = aListener;
         glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
-        animator = new FPSAnimator(60);
+        animator = new FPSAnimator(10);
         animator.add(glcanvas);
         animator.start();
 
@@ -34,6 +35,5 @@ public class Anim extends JFrame {
         setVisible(true);
         setFocusable(true);
         glcanvas.requestFocus();
+    }
 }
-}
-
