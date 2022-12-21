@@ -11,26 +11,29 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
 public class AnimGLEventListener extends AnimListener {
-    private static final int DI = 110;
-    private static final int DJ = 110;
-    private static final int MAX_ENEMIES = 1;
-    private final int[][] entity = new int[DI][DJ];
-    private final int[][] enemiesDirection = new int[DI][DJ];
+    private static  long lastEneny=0;
+    private static final long createEnemies=500;
+    private long lastBulletFired = 0;
+    private long fireRate = 500;
     //-----------------------------------------bullet--------------------------------------//
     private final int bulletIndex = 4;
+    //-----------------------------------------generate--------------------------------------//
+    private final int generateIndex = 5;
+
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
     plane1 plane = new plane1();
-    //--------------------------------------------------------------------------------------//
+    Enemies entity =new Enemies();
+//--------------------------------------------------------------------------------------//
+
     int maxWidth = 10;
     int maxHeight = 100;
     int stop1 = 0;
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), new plane1().getBulletPic(), "boat1.png", "boat2.png"};
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(),plane.getBulletPic(),entity.getFirstPic(),entity.getSecendPic() };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
+    ArrayList<Enemies> Enemies = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
-    private long lastBulletFired = 0;
-    private long fireRate = 500;
     private double planeXposition = maxWidth / 2;
     private double planeYposition = 10;
     private int animationIndex = 0;
@@ -42,6 +45,7 @@ public class AnimGLEventListener extends AnimListener {
 
     //            main method
     public static void main(String[] args) {
+
     }
 
     public void init(GLAutoDrawable gld) {
@@ -70,23 +74,27 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     public void display(GLAutoDrawable gld) {
-
         GL gl = gld.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
+
         handleKeyPress();
         moveEnemies();
         moveBullets();
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
-        //genarate enemies after 1sec
-        if (stop1-- == 0)
-            generateEnemies();
-        drowEnemies(gl);
+        //        drowEnemies(gl);
+
+        CreateEnemies(gl);
         generateBullets(gl);
+        removeEnemies();
         removeBullets();
+
+
+
+
+
+        System.out.println(Enemies.size());
         System.out.println(bullets.size());
-
-
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -96,81 +104,39 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     private void moveEnemies() {
-        for (int i = 0; i < DI; i++) {
-            for (int j = 1; j < DJ; j++) {
-                if (entity[i][j] == 2) {
-                    entity[i][j] = 0;
-                    entity[i][j - 1] = 2;
-                    enemiesDirection[i][j - 1] = enemiesDirection[i][j];
-                    enemiesDirection[i][j] = 0;
-                }
-            }
+        for (int i =0; i<Enemies.size(); i++) {
+            Enemies.get(i).y -= 1;
+
         }
-        for (int j = 0; j < DJ; j++) {
-            if (entity[j][0] == 2) {
-                entity[j][0] = 0;
-            }
-        }
+
+
+
     }
-    private void moveBullets() {
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).y += 2;
-        }
-    }
-    private void removeBullets() {
-        Iterator itr = bullets.iterator();
+    private void removeEnemies() {
+        Iterator itr = Enemies.iterator();
 
         while (itr.hasNext()) {
-            Bullet b = (Bullet) itr.next();
-            if (!b.fired)
+            Enemies b = (Enemies) itr.next();
+            if (!b.create)
                 itr.remove();
         }
     }
 
 
-    private void generateEnemies() {
-        int y = 0;
-        int cnt = MAX_ENEMIES;
-        while (cnt-- > 0) {
-            int x = (int) (Math.random() * 50);
-            y = 100;
-            entity[x][y] = 2;
-            int random = (int) ((Math.random() * 2) + 1);
-            enemiesDirection[x][y] = random;
-            stop1 = 4;
+    //                       drow methods
+    private void CreateEnemies(GL gl){
+        if (lastEneny + createEnemies < System.currentTimeMillis()) {
+            lastEneny = System.currentTimeMillis();
+            Enemies.add(new Enemies(Math.random()*8,0,1700));
+        }
+        for (Enemies bullet : Enemies) {
+            bullet.validate();
+            drawSprite(gl, bullet.x, bullet.y,(int)Math.random()+5, 1);
         }
 
-    }
-    //                         drow methods
-
-    private void generateBullets(GL gl) {
-        for (Bullet bullet : bullets) {
-            bullet.invalidate();
-            drowBullet(gl, bullet.x, bullet.y, 1);
-        }
 
     }
 
-
-    private void drowEnemies(GL gl) {
-
-        for (int i = 0; i < DI; i++) {
-
-            for (int j = 0; j < DJ; j++) {
-
-                if (entity[i][j] == 2) {
-
-                    drowSpriteEnemy(gl, i, j);
-
-                }
-            }
-        }
-    }
-
-    private void drowSpriteEnemy(GL gl, int x, int y) {
-        drawSprite(gl, x, y, texture.length - enemiesDirection[x][y], 1);
-
-    }
 
     private void drowPlane(GL gl, double x, double y, int index) {
         drawSprite(gl, x, y, index, 1);
@@ -196,6 +162,28 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+    private void moveBullets() {
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).y += 2;
+        }
+    }
+    private void removeBullets() {
+        Iterator itr = bullets.iterator();
+
+        while (itr.hasNext()) {
+            Bullet b = (Bullet) itr.next();
+            if (!b.fired)
+                itr.remove();
+        }
+    }
+    private void generateBullets(GL gl) {
+        for (Bullet bullet : bullets) {
+            bullet.invalidate();
+            drowBullet(gl, bullet.x, bullet.y, 1);
+        }
+
+    }
+
 
     private void drowBullet(GL gl, double x, double y, float scale) {
         gl.glEnable(GL.GL_BLEND);
@@ -217,7 +205,6 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
-
     // handel palne movement
     public void handleKeyPress() {
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
@@ -238,15 +225,7 @@ public class AnimGLEventListener extends AnimListener {
             }
         }
 
-
     }
-
-    //
-    /*
-     * KeyListener
-     */
-
-
     @Override
     public void keyPressed(final KeyEvent event) {
         int keyCode = event.getKeyCode();
@@ -268,3 +247,4 @@ public class AnimGLEventListener extends AnimListener {
         return keyBits.get(keyCode);
     }
 }
+
