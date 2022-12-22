@@ -78,14 +78,17 @@ public class AnimGLEventListener extends AnimListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
 
-        handleKeyPress();
+
         moveEnemies();
         moveBullets();
+
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //        drowEnemies(gl);
 
         CreateEnemies(gl);
         generateBullets(gl);
+        handleKeyPress();
+        resolveBulletCollision(gl);
         removeEnemies();
         removeBullets();
 
@@ -164,7 +167,7 @@ public class AnimGLEventListener extends AnimListener {
     }
     private void moveBullets() {
         for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).y += 2;
+            bullets.get(i).y += 1.2;
         }
     }
     private void removeBullets() {
@@ -205,7 +208,33 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+
+    //collision between bullet and ship
+    public void resolveBulletCollision(GL gl){
+        outer: for (Enemies Enemies : Enemies) {
+            for (Bullet bullet : bullets) {
+
+                if(((int)(bullet.x)>=(int)(Enemies.x-0.3)&&(int)(bullet.x)<=(int)(Enemies.x+0.3))&&((int)(bullet.y)>=(int)(Enemies.y-0.1)&&(int)(bullet.y)<=(int)(Enemies.y+0.1))){
+                    Enemies.create=false;
+                    bullet.fired=false;
+                    for (int j = 0; j < 100; j++) {
+                        drawSprite(gl,Enemies.x,Enemies.y,3,1);
+                    }
+
+                    break outer;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
     // handel palne movement
+
     public void handleKeyPress() {
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
             animationIndex = 2;
