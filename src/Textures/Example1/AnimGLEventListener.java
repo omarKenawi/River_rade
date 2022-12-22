@@ -12,6 +12,7 @@ import java.util.BitSet;
 import java.util.Iterator;
 public class AnimGLEventListener extends AnimListener {
     private static  long lastEneny=0;
+    int counter =0;
     private static final long createEnemies=500;
     private long lastBulletFired = 0;
     private long fireRate = 500;
@@ -73,6 +74,7 @@ public class AnimGLEventListener extends AnimListener {
         }
     }
 
+
     public void display(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
@@ -81,7 +83,6 @@ public class AnimGLEventListener extends AnimListener {
 
         moveEnemies();
         moveBullets();
-
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //        drowEnemies(gl);
 
@@ -89,15 +90,15 @@ public class AnimGLEventListener extends AnimListener {
         generateBullets(gl);
         handleKeyPress();
         resolveBulletCollision(gl);
+        resolvePlaneCollision(gl);
         removeEnemies();
         removeBullets();
 
 
 
 
-
-        System.out.println(Enemies.size());
-        System.out.println(bullets.size());
+//        System.out.println(Enemies.size());
+//        System.out.println(bullets.size());
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -130,7 +131,7 @@ public class AnimGLEventListener extends AnimListener {
     private void CreateEnemies(GL gl){
         if (lastEneny + createEnemies < System.currentTimeMillis()) {
             lastEneny = System.currentTimeMillis();
-            Enemies.add(new Enemies(Math.random()*8,0,1700));
+            Enemies.add(new Enemies(Math.random()*8,0,2100));
         }
         for (Enemies enemies : Enemies) {
             enemies.validate();
@@ -167,7 +168,7 @@ public class AnimGLEventListener extends AnimListener {
     }
     private void moveBullets() {
         for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).y += 1.2;
+            bullets.get(i).y += 1.4;
         }
     }
     private void removeBullets() {
@@ -210,7 +211,7 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     //collision between bullet and ship
-    public void resolveBulletCollision(GL gl){
+    private void resolveBulletCollision(GL gl){
         outer: for (Enemies Enemies : Enemies) {
             for (Bullet bullet : bullets) {
 
@@ -220,12 +221,29 @@ public class AnimGLEventListener extends AnimListener {
                     for (int j = 0; j < 100; j++) {
                         drawSprite(gl,Enemies.x,Enemies.y,3,1);
                     }
+                    //score+=10;
 
                     break outer;
                 }
             }
         }
     }
+    private void resolvePlaneCollision(GL gl){
+        for (Enemies Enemies : Enemies) {
+            if ((int)(Enemies.y)<=(int)(planeYposition+.1)&&(int)(Enemies.y)>=(int)(planeYposition-0.1)&&(int)(Enemies.x)<=(int)(planeXposition+.5)&&(int)(Enemies.x)>=(int)(planeXposition-.5)) {
+                Enemies.create = false;
+                System.out.println("Game Over "+counter++);
+                for (int j = 0; j < 100; j++) {
+                    drawSprite(gl, planeXposition, planeYposition, 3, 1);
+                }
+            }
+
+
+        }
+
+
+    }
+
 
 
 
@@ -250,7 +268,7 @@ public class AnimGLEventListener extends AnimListener {
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
             if (lastBulletFired + fireRate < System.currentTimeMillis()) {
                 lastBulletFired = System.currentTimeMillis();
-                bullets.add(new Bullet(planeXposition, planeYposition, 1100));
+                bullets.add(new Bullet(planeXposition, planeYposition, 1500));
             }
         }
 
