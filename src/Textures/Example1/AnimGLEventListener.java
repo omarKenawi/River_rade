@@ -5,6 +5,7 @@ import Textures.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,12 +84,12 @@ public class AnimGLEventListener extends AnimListener {
 
         moveEnemies();
         moveBullets();
+        handleKeyPress();
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //        drowEnemies(gl);
 
         CreateEnemies(gl);
         generateBullets(gl);
-        handleKeyPress();
         resolveBulletCollision(gl);
         resolvePlaneCollision(gl);
         removeEnemies();
@@ -229,12 +230,12 @@ public class AnimGLEventListener extends AnimListener {
         }
     }
     private void resolvePlaneCollision(GL gl){
-        for (Enemies Enemies : Enemies) {
-            if ((int)(Enemies.y)<=(int)(planeYposition+.1)&&(int)(Enemies.y)>=(int)(planeYposition-0.1)&&(int)(Enemies.x)<=(int)(planeXposition+.5)&&(int)(Enemies.x)>=(int)(planeXposition-.5)) {
-                Enemies.create = false;
-                System.out.println("Game Over "+counter++);
-                for (int j = 0; j < 100; j++) {
-                    drawSprite(gl, planeXposition, planeYposition, 3, 1);
+            for (Enemies Enemies : Enemies) {
+                if ((int)(Enemies.y)<=(int)(planeYposition+.7)&&(int)(Enemies.y)>=(int)(planeYposition-.7)&&(int)(Enemies.x)<=(int)(planeXposition+.3)&&(int)(Enemies.x)>=(int)(planeXposition-.3)) {
+                    System.out.println("GameOver");
+                    JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
+                            JOptionPane.WARNING_MESSAGE);
+                    System.exit(0);
                 }
             }
 
@@ -242,7 +243,7 @@ public class AnimGLEventListener extends AnimListener {
         }
 
 
-    }
+
 
 
 
