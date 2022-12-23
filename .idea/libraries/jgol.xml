@@ -3,8 +3,16 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/gluegen-rt.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jogl.jar!/" />
+      <root url="jar://C:/JOGLwin/lib64/gluegen-rt.jar!/" />
+      <root url="jar://C:/JOGLwin/lib64/jogl.jar!/" />
     </CLASSES>
     <JAVADOC />
+    <NATIVE>
+      <root url="file://C:/JOGLwin/lib64" />
+      <root url="file://C:/JOGLwin/lib64" />
+      <root url="file://C:/JOGLwin/lib64" />
+      <root url="file://C:/JOGLwin/lib64" />
+    </NATIVE>
     <SOURCES />
   </library>
 </component>

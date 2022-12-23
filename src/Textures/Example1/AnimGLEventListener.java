@@ -30,7 +30,10 @@ public class AnimGLEventListener extends AnimListener {
     int maxWidth = 110;
     int maxHeight = 110;
     int stop1 = 0;
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic()};
+    double[] ybr = {0.5,0.4,0.3,0.2,0.1,0,-0.1,-0.2,-0.3,-0.4,-0.5};
+    double[] xbr = {0.1,0.2,0.4,0.1,0.11,0.2,0.25,0.3,0.4,0.1,0};
+    double[] xbl = {0,-0.1,-0.4,-0.3,-0.25,-0.2,-0.11,-0.1,-0.4,-0.2,-0.1};
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic(),"block.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     ArrayList<Enemies> Enemies = new ArrayList<>();
@@ -58,6 +61,7 @@ public class AnimGLEventListener extends AnimListener {
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glGenTextures(textureNames.length, textures, 0);
+
 
         for (int i = 0; i < textureNames.length; i++) {
             try {
@@ -95,6 +99,45 @@ public class AnimGLEventListener extends AnimListener {
         resolvePlaneCollision(gl);
         removeEnemies();
         removeBullets();
+        drawMap(gl);
+
+
+    }
+
+    private void blocksCollesion(int i)
+    {
+        if((transXcoordinates(planeXposition) >= xbr[i] && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.2) || (transXcoordinates(planeXposition) <= xbl[i] && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.2))
+        {
+            planeXposition = maxWidth / 2;
+            planeYposition = 10;
+        }
+    }
+
+    private void generateBlocks(int i)
+    {
+        if (ybr[i] < -0.6)
+        {
+            ybr[i] = 0.5;
+            xbr[i] = getRandomNumber(0.1,0.45);
+            xbl[i] = getRandomNumber(-0.1,-0.45);
+        }
+    }
+
+    private void blocksSpeed(int i , double speed)
+    {
+        ybr[i] -= speed;
+    }
+
+    private void drawMap(GL gl)
+    {
+        for (int i = 0;i<=10;i++)
+        {
+            drawblocks(gl,xbr[i],ybr[i],1);
+            drawLeftBlocks(gl,xbl[i],ybr[i],1);
+            blocksSpeed(i,0.01);
+            generateBlocks(i);
+            blocksCollesion(i);
+        }
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -240,7 +283,67 @@ public class AnimGLEventListener extends AnimListener {
 
 
     }
+    private void drawblocks(GL gl, double x, double y, float scale) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glScaled(  scale,  scale, 1);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+//        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f((float)x,(float) y, -1.0f);
+//        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f((float)(x+(50-x)), (float) y, -1.0f);
+//        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f((float)(x+(50-x)), (float)(y+0.2), -1.0f);
+//        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f((float)x, (float)(y+0.2), -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
+    private void drawLeftBlocks(GL gl, double x, double y, float scale) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glScaled(  scale,  scale, 1);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+//        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f((float)(x-1),(float) y, -1.0f);
+//        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f((float)x, (float) y, -1.0f);
+//        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f((float)x, (float)(y+0.2), -1.0f);
+//        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f((float)(x-1), (float)(y+0.2), -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
+    public double getRandomNumber(double min, double max) {
+        return  ((Math.random() * (max - min)) + min);
+    }
 
+    public double transXcoordinates(double x)
+    {
+        if (x >= 50 && x<= 100)
+        {
+            return (x/100)-0.5;
+        }
+        return -0.5+(x/100);
+    }
+    public double transYcoordinates(double y)
+    {
+        if (y >= 50 && y<= 100)
+        {
+            return (y/100)-0.5;
+        }
+        return -0.5+(y/100);
+
+    }
 
     // handel palne movement
 
