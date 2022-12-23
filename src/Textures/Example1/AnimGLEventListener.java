@@ -2,6 +2,7 @@ package Textures.Example1;
 
 import Textures.AnimListener;
 import Textures.TextureReader;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -11,35 +12,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
+
+
 public class AnimGLEventListener extends AnimListener {
-    private static  long lastEneny=0;
-    int counter =0;
-    private static final long createEnemies=500;
-    private long lastBulletFired = 0;
-    private long fireRate = 500;
+    private static final long createEnemies = 500;
+    private static long lastEneny = 0;
     //-----------------------------------------bullet--------------------------------------//
     private final int bulletIndex = 4;
     //-----------------------------------------generate--------------------------------------//
     private final int generateIndex = 5;
-
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
+    int counter = 0;
     plane1 plane = new plane1();
-    Enemies entity =new Enemies();
-//--------------------------------------------------------------------------------------//
-
-    int maxWidth = 10;
-    int maxHeight = 100;
+    Enemies entity = new Enemies();
+    //--------------------------------------------------------------------------------------//
+    int maxWidth = 110;
+    int maxHeight = 110;
     int stop1 = 0;
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(),plane.getBulletPic(),entity.getFirstPic(),entity.getSecendPic() };
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic()};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     ArrayList<Enemies> Enemies = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
+    private long lastBulletFired = 0;
+    private long fireRate = 500;
     private double planeXposition = maxWidth / 2;
     private double planeYposition = 10;
     private int animationIndex = 0;
-    private double rightXPlaneBoundry = 9, leftXPlaneBoundry = 0;
+    private double rightXPlaneBoundry = 100, leftXPlaneBoundry = 0;
 
     public AnimGLEventListener() {
 
@@ -82,24 +83,18 @@ public class AnimGLEventListener extends AnimListener {
         gl.glLoadIdentity();
 
 
-        moveEnemies();
+//        moveEnemies();
         moveBullets();
         handleKeyPress();
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //        drowEnemies(gl);
 
-        CreateEnemies(gl);
+//        CreateEnemies(gl);
         generateBullets(gl);
         resolveBulletCollision(gl);
         resolvePlaneCollision(gl);
         removeEnemies();
         removeBullets();
-
-
-
-
-//        System.out.println(Enemies.size());
-//        System.out.println(bullets.size());
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -109,14 +104,14 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     private void moveEnemies() {
-        for (int i =0; i<Enemies.size(); i++) {
+        for (int i = 0; i < Enemies.size(); i++) {
             Enemies.get(i).y -= 1;
 
         }
 
 
-
     }
+
     private void removeEnemies() {
         Iterator itr = Enemies.iterator();
 
@@ -129,19 +124,18 @@ public class AnimGLEventListener extends AnimListener {
 
 
     //                       drow methods
-    private void CreateEnemies(GL gl){
+    private void CreateEnemies(GL gl) {
         if (lastEneny + createEnemies < System.currentTimeMillis()) {
             lastEneny = System.currentTimeMillis();
-            Enemies.add(new Enemies(Math.random()*8,0,2100));
+            Enemies.add(new Enemies(Math.random() * 8, 0, 2600));
         }
         for (Enemies enemies : Enemies) {
             enemies.validate();
-            drawSprite(gl, enemies.x, enemies.y,(int)Math.random()+5, 1);
+            drawSprite(gl, enemies.x, enemies.y, (int) Math.random() + 5, 1);
         }
 
 
     }
-
 
     private void drowPlane(GL gl, double x, double y, int index) {
         drawSprite(gl, x, y, index, 1);
@@ -167,11 +161,13 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+
     private void moveBullets() {
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).y += 1.4;
         }
     }
+
     private void removeBullets() {
         Iterator itr = bullets.iterator();
 
@@ -181,6 +177,7 @@ public class AnimGLEventListener extends AnimListener {
                 itr.remove();
         }
     }
+
     private void generateBullets(GL gl) {
         for (Bullet bullet : bullets) {
             bullet.invalidate();
@@ -212,15 +209,16 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     //collision between bullet and ship
-    private void resolveBulletCollision(GL gl){
-        outer: for (Enemies Enemies : Enemies) {
+    private void resolveBulletCollision(GL gl) {
+        outer:
+        for (Enemies Enemies : Enemies) {
             for (Bullet bullet : bullets) {
 
-                if(((int)(bullet.x)>=(int)(Enemies.x-0.3)&&(int)(bullet.x)<=(int)(Enemies.x+0.3))&&((int)(bullet.y)>=(int)(Enemies.y-0.1)&&(int)(bullet.y)<=(int)(Enemies.y+0.1))){
-                    Enemies.create=false;
-                    bullet.fired=false;
+                if (((int) (bullet.x) >= (int) (Enemies.x - 0.3) && (int) (bullet.x) <= (int) (Enemies.x + 0.3)) && ((int) (bullet.y) >= (int) (Enemies.y - 0.1) && (int) (bullet.y) <= (int) (Enemies.y + 0.1))) {
+                    Enemies.create = false;
+                    bullet.fired = false;
                     for (int j = 0; j < 100; j++) {
-                        drawSprite(gl,Enemies.x,Enemies.y,3,1);
+                        drawSprite(gl, Enemies.x, Enemies.y, 3, 1);
                     }
                     //score+=10;
 
@@ -229,27 +227,19 @@ public class AnimGLEventListener extends AnimListener {
             }
         }
     }
-    private void resolvePlaneCollision(GL gl){
-            for (Enemies Enemies : Enemies) {
-                if ((int)(Enemies.y)<=(int)(planeYposition+.7)&&(int)(Enemies.y)>=(int)(planeYposition-.7)&&(int)(Enemies.x)<=(int)(planeXposition+.3)&&(int)(Enemies.x)>=(int)(planeXposition-.3)) {
-                    System.out.println("GameOver");
-                    JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
-                            JOptionPane.WARNING_MESSAGE);
-                    System.exit(0);
-                }
+
+    private void resolvePlaneCollision(GL gl) {
+        for (Enemies Enemies : Enemies) {
+            if ((int) (Enemies.y) <= (int) (planeYposition + .7) && (int) (Enemies.y) >= (int) (planeYposition - .7) && (int) (Enemies.x) <= (int) (planeXposition + .3) && (int) (Enemies.x) >= (int) (planeXposition - .3)) {
+                System.out.println("GameOver");
+                JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
+                        JOptionPane.WARNING_MESSAGE);
+                System.exit(0);
             }
-
-
         }
 
 
-
-
-
-
-
-
-
+    }
 
 
     // handel palne movement
@@ -259,12 +249,22 @@ public class AnimGLEventListener extends AnimListener {
             animationIndex = 2;
             if (planeXposition > leftXPlaneBoundry)
                 planeXposition -= plane.getPlaneSpeed();
+            if (planeXposition<leftXPlaneBoundry)
+                planeXposition=leftXPlaneBoundry;
         } else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
             animationIndex = 1;
             if (planeXposition < rightXPlaneBoundry)
                 planeXposition += plane.getPlaneSpeed();
-            if (planeXposition > 9)
-                planeXposition = 9;
+            if (planeXposition> rightXPlaneBoundry)
+                planeXposition = rightXPlaneBoundry;
+        }
+        else if (isKeyPressed(KeyEvent.VK_UP)) {
+            planeYposition++;
+
+        }
+        else if (isKeyPressed(KeyEvent.VK_DOWN)) {
+            planeYposition--;
+
         }
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
             if (lastBulletFired + fireRate < System.currentTimeMillis()) {
@@ -272,12 +272,14 @@ public class AnimGLEventListener extends AnimListener {
                 bullets.add(new Bullet(planeXposition, planeYposition, 1500));
             }
         }
-
     }
+
     @Override
     public void keyPressed(final KeyEvent event) {
         int keyCode = event.getKeyCode();
         keyBits.set(keyCode);
+        System.out.println("plane x pos "+planeXposition+" plane Y pos "+planeYposition);
+
     }
 
     @Override
