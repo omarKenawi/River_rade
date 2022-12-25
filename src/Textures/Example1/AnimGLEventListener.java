@@ -6,7 +6,6 @@ import Textures.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +96,7 @@ public class AnimGLEventListener extends AnimListener {
         moveEnemies();
         moveBullets();
         handleKeyPress();
-        drowPlane(gl, planeXposition, planeYposition,plane.isExist(),animationIndex);
+        drowPlane(gl, planeXposition, planeYposition,animationIndex);
         //        drowEnemies(gl);
 
         CreateEnemies(gl);
@@ -108,18 +107,19 @@ public class AnimGLEventListener extends AnimListener {
         removeBullets();
         drawMap(gl);
 
-//        counter1++;
-//        counter2++;
-//        counter3++;
+
     }
 
-    private void blocksCollesion(int i)
+    private void blocksCollesion(int i,GL gl)
     {
         if((transXcoordinates(planeXposition) >= xbr[i]-0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3) || (transXcoordinates(planeXposition) <= xbl[i]+0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3))
         {
-
+            for (int j = 0; j < 60; j++) {
+                drawSprite(gl,planeXposition,planeYposition,3,2);
+            }
         }
     }
+
 
     private void generateBlocks(int i)
     {
@@ -147,7 +147,7 @@ public class AnimGLEventListener extends AnimListener {
             drawLeftBlocks(gl, xbl[i], ybr[i], 0.6f);
             blocksSpeed(i, 0.0075);
             generateBlocks(i);
-            blocksCollesion(i);
+            blocksCollesion(i,gl);
 
             if(ybr[i]>=0.575&& counter2>=(int) ((Math.random()*400) + 700) ){
                 xbr[i] = 0.03;
@@ -174,7 +174,6 @@ public class AnimGLEventListener extends AnimListener {
     private void moveEnemies() {
         for (int i = 0; i < Enemies.size(); i++) {
             Enemies.get(i).y -= 1;
-
         }
 
 
@@ -205,8 +204,7 @@ public class AnimGLEventListener extends AnimListener {
 
     }
 
-    private void drowPlane(GL gl, double x, double y,boolean exist, int index) {
-        if (exist)
+    private void drowPlane(GL gl, double x, double y, int index) {
             drawSprite(gl, x, y, index, 1);
     }
 
@@ -288,7 +286,7 @@ public class AnimGLEventListener extends AnimListener {
                     Enemies.create = false;
                     bullet.fired = false;
                     for (int j = 0; j < 100; j++) {
-                        drawSprite(gl, Enemies.x, Enemies.y, 3, 1);
+                        drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                     }
                     //score+=10;
 
@@ -304,10 +302,9 @@ public class AnimGLEventListener extends AnimListener {
                     ||planeYposition+4==Enemies.y&&Enemies.x <=  (planeXposition + 9) &&Enemies.x >=  (planeXposition - 9)
             )
             {
-                System.out.println("GameOver");
-                JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
-                        JOptionPane.WARNING_MESSAGE);
-                System.exit(0);
+                for (int j = 0; j < 100; j++) {
+                    drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                }
             }
         }
 
