@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 
 public class AnimGLEventListener extends AnimListener {
-    private static final long createEnemies = 500;
+    private static final long createEnemies = 3000;
     private static long lastEneny = 0;
     private static final long createEnemies1 = 500;
     private static long lastEneny1 = 0;
@@ -94,22 +94,25 @@ public class AnimGLEventListener extends AnimListener {
         gl.glLoadIdentity();
 
 
-//        moveEnemies();
+        moveEnemies();
         moveBullets();
         handleKeyPress();
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
         //        drowEnemies(gl);
 
-//        CreateEnemies(gl);
+        CreateEnemies(gl);
         generateBullets(gl);
         resolveBulletCollision(gl);
         resolvePlaneCollision(gl);
         removeEnemies();
         removeBullets();
         drawMap(gl);
-        counter1++;
-        counter2++;
-        counter3++;
+//        if (Enemies.size()>0)
+//        System.out.println(Enemies.get(0).x+"    "+Enemies.get(0).y);
+
+//        counter1++;
+//        counter2++;
+//        counter3++;
     }
 
     private void blocksCollesion(int i)
@@ -159,17 +162,9 @@ public class AnimGLEventListener extends AnimListener {
                 xbl[i]=-0.03;
                 counter1=100;
             }
-//            if( ybc[j]>=0.6 && counter3>=(int) (Math.random()*400) + 200){
-//
-//                drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
-//            }
-            drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
+//            drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
 
         }
-
-
-
-        System.out.println(counter1+"   "+counter2);
 
     }
 
@@ -203,7 +198,7 @@ public class AnimGLEventListener extends AnimListener {
     private void CreateEnemies(GL gl) {
         if (lastEneny + createEnemies < System.currentTimeMillis()) {
             lastEneny = System.currentTimeMillis();
-            Enemies.add(new Enemies(Math.random() * 8, 0, 2600));
+            Enemies.add(new Enemies(10+((int)(Math.random() * 80)), 0, 2*2600));
         }
         for (Enemies enemies : Enemies) {
             enemies.validate();
@@ -307,7 +302,10 @@ public class AnimGLEventListener extends AnimListener {
 
     private void resolvePlaneCollision(GL gl) {
         for (Enemies Enemies : Enemies) {
-            if ((int) (Enemies.y) <= (int) (planeYposition + .7) && (int) (Enemies.y) >= (int) (planeYposition - .7) && (int) (Enemies.x) <= (int) (planeXposition + .3) && (int) (Enemies.x) >= (int) (planeXposition - .3)) {
+            if ((Enemies.y <  planeYposition + 4 && Enemies.y >=  planeYposition - 4 &&Enemies.x <  planeXposition + 4 &&Enemies.x >=  planeXposition - 4)
+                    ||planeYposition+4==Enemies.y&&Enemies.x <=  (planeXposition + 9) &&Enemies.x >=  (planeXposition - 9)
+            )
+            {
                 System.out.println("GameOver");
                 JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
                         JOptionPane.WARNING_MESSAGE);
@@ -424,6 +422,8 @@ public class AnimGLEventListener extends AnimListener {
         int keyCode = event.getKeyCode();
         keyBits.set(keyCode);
         System.out.println("plane x pos "+planeXposition+" plane Y pos "+planeYposition);
+                if (Enemies.size()>0)
+        System.out.println("enemy x pos "+Enemies.get(0).x+"    "+" enemy y pos "+Enemies.get(0).y);
 
     }
 
@@ -442,4 +442,3 @@ public class AnimGLEventListener extends AnimListener {
         return keyBits.get(keyCode);
     }
 }
-
