@@ -14,6 +14,7 @@ import java.util.BitSet;
 import java.util.Iterator;
 
 
+
 public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 500;
     private static long lastEneny = 0;
@@ -409,14 +410,7 @@ public class AnimGLEventListener extends AnimListener {
             if (planeXposition> rightXPlaneBoundry)
                 planeXposition = rightXPlaneBoundry;
         }
-        else if (isKeyPressed(KeyEvent.VK_UP)) {
-            planeYposition++;
 
-        }
-        else if (isKeyPressed(KeyEvent.VK_DOWN)) {
-            planeYposition--;
-
-        }
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
             if (lastBulletFired + fireRate < System.currentTimeMillis()) {
                 lastBulletFired = System.currentTimeMillis();
