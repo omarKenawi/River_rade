@@ -6,6 +6,7 @@ import Textures.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +16,11 @@ import java.util.Iterator;
 
 
 public class AnimGLEventListener extends AnimListener {
+    int benzein=0;
     private static final long createEnemies = 1000;
+    private static final long createBenzin = 5357;
     private static long lastEneny = 0;
+    private static long lastBenzin = 0;
     private static final long createEnemies1 = 500;
     private static long lastEneny1 = 0;
     //-----------------------------------------bullet--------------------------------------//
@@ -28,6 +32,8 @@ public class AnimGLEventListener extends AnimListener {
     int counter = 0;
     plane1 plane = new plane1();
     Enemies entity = new Enemies();
+
+    Benzin ben=new Benzin();
     //--------------------------------------------------------------------------------------//
     int maxWidth = 110;
     int maxHeight = 110;
@@ -36,11 +42,12 @@ public class AnimGLEventListener extends AnimListener {
     double[] ybc = {0.7,0.625,0.55,0.475,0.4,0.325,0.25,0.175,0.1,0.025,-0.05,-0.125,-0.2,-0.275,-0.35,-0.425,-0.5,-0.575,-0.65,-0.725};
     double[] xbr = {0.54,0.6,0.53,0.55,0.53,0.57,0.6,0.56,0.59,0.54,0.55,0.58,0.55,0.6,0.59,0.53,0.54,0.58,0.53,0.6};
     double[] xbl = {-0.55,-0.55,-0.53,-0.6,-0.56,-0.6,-0.57,-0.55,-0.59,-0.56,-0.54,-0.6,-0.57,-0.53,-0.55,-0.6,-0.6,-0.57,-0.53,-0.55};
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic(),"block.png"};
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic(),"block.png",ben.getFirstPic()};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     ArrayList<Enemies> Enemies = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
+    ArrayList<Benzin> benzin = new ArrayList<>();
     private long lastBulletFired = 0;
     private long fireRate = 500;
     private double planeXposition = maxWidth / 2;
@@ -95,31 +102,34 @@ public class AnimGLEventListener extends AnimListener {
 
         moveEnemies();
         moveBullets();
+        moveBenzin();
         handleKeyPress();
         drowPlane(gl, planeXposition, planeYposition,animationIndex);
         //        drowEnemies(gl);
 
         CreateEnemies(gl);
+        Benzin(gl);
         generateBullets(gl);
         resolveBulletCollision(gl);
         resolvePlaneCollision(gl);
+        resolveBenzinCollision(gl);
         removeEnemies();
+        removeBenzin();
         removeBullets();
         drawMap(gl);
 
-
+//        counter1++;
+//        counter2++;
+//        counter3++;
     }
 
-    private void blocksCollesion(int i,GL gl)
+    private void blocksCollesion(int i)
     {
         if((transXcoordinates(planeXposition) >= xbr[i]-0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3) || (transXcoordinates(planeXposition) <= xbl[i]+0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3))
         {
-            for (int j = 0; j < 60; j++) {
-                drawSprite(gl,planeXposition,planeYposition,3,2);
-            }
+
         }
     }
-
 
     private void generateBlocks(int i)
     {
@@ -147,7 +157,7 @@ public class AnimGLEventListener extends AnimListener {
             drawLeftBlocks(gl, xbl[i], ybr[i], 0.6f);
             blocksSpeed(i, 0.0075);
             generateBlocks(i);
-            blocksCollesion(i,gl);
+            blocksCollesion(i);
 
             if(ybr[i]>=0.575&& counter2>=(int) ((Math.random()*400) + 700) ){
                 xbr[i] = 0.03;
@@ -174,6 +184,7 @@ public class AnimGLEventListener extends AnimListener {
     private void moveEnemies() {
         for (int i = 0; i < Enemies.size(); i++) {
             Enemies.get(i).y -= 1;
+
         }
 
 
@@ -203,8 +214,37 @@ public class AnimGLEventListener extends AnimListener {
 
 
     }
+    private void Benzin(GL gl) {
+        if (lastBenzin + createBenzin < System.currentTimeMillis()) {
+            lastBenzin = System.currentTimeMillis();
 
+            benzin.add(new Benzin(10+((int)(Math.random() * 80)), 0, 2*2600));
+        }
+        for (Benzin ben : benzin) {
+            ben.validate();
+            drawSprite(gl, ben.x, ben.y, 8, 1);
+        }
+
+
+    }
+    private void removeBenzin() {
+        Iterator itr = benzin.iterator();
+
+        while (itr.hasNext()) {
+            Benzin c = (Benzin) itr.next();
+            if (!c.create)
+                itr.remove();
+        }
+    }
+
+    private void moveBenzin() {
+        for (int i = 0; i < benzin.size(); i++) {
+            benzin.get(i).y -= 1;
+
+        }
+    }
     private void drowPlane(GL gl, double x, double y, int index) {
+
             drawSprite(gl, x, y, index, 1);
     }
 
@@ -286,7 +326,7 @@ public class AnimGLEventListener extends AnimListener {
                     Enemies.create = false;
                     bullet.fired = false;
                     for (int j = 0; j < 100; j++) {
-                        drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                        drawSprite(gl, Enemies.x, Enemies.y, 3, 1);
                     }
                     //score+=10;
 
@@ -302,9 +342,20 @@ public class AnimGLEventListener extends AnimListener {
                     ||planeYposition+4==Enemies.y&&Enemies.x <=  (planeXposition + 9) &&Enemies.x >=  (planeXposition - 9)
             )
             {
-                for (int j = 0; j < 100; j++) {
-                    drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
-                }
+                System.out.println("GameOver");
+                JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
+                        JOptionPane.WARNING_MESSAGE);
+                System.exit(0);
+            }
+        }
+
+
+    }
+    private void resolveBenzinCollision(GL gl) {
+        for (Benzin ben : benzin) {
+            if ((ben.y <=  planeYposition+3 && ben.y >=  planeYposition-3 &&ben.x <  planeXposition + 4 &&ben.x >=  planeXposition - 1))
+            {
+                System.out.println(++benzein);
             }
         }
 
@@ -312,7 +363,7 @@ public class AnimGLEventListener extends AnimListener {
     }
     private void drawblocks(GL gl, double x, double y, float scale) {
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[7]);    // Turn Blending On
         gl.glPushMatrix();
         gl.glTranslated(x, y, 0);
         gl.glScaled(  scale,  scale, 1);
@@ -335,7 +386,7 @@ public class AnimGLEventListener extends AnimListener {
     }
     private void drawLeftBlocks(GL gl, double x, double y, float scale) {
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[7]);    // Turn Blending On
         gl.glPushMatrix();
         gl.glTranslated(x, y, 0);
         gl.glScaled(  scale,  scale, 1);

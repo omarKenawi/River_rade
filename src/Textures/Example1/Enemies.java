@@ -11,7 +11,7 @@ public class Enemies {
     }
     public Enemies( double x, double y, int lifetime){
         this.x = initX = x;
-        this.y = initY = y+100;
+        this.y = initY = y+110;
         this.create = true;
         start = System.currentTimeMillis();
         lifeTime = lifetime;
