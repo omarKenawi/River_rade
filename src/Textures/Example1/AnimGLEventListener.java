@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 
 public class AnimGLEventListener extends AnimListener {
-    private static final long createEnemies = 3000;
+    private static final long createEnemies = 1000;
     private static long lastEneny = 0;
     private static final long createEnemies1 = 500;
     private static long lastEneny1 = 0;
@@ -97,7 +97,7 @@ public class AnimGLEventListener extends AnimListener {
         moveEnemies();
         moveBullets();
         handleKeyPress();
-        drowPlane(gl, planeXposition, planeYposition, animationIndex);
+        drowPlane(gl, planeXposition, planeYposition,plane.isExist(),animationIndex);
         //        drowEnemies(gl);
 
         CreateEnemies(gl);
@@ -107,8 +107,6 @@ public class AnimGLEventListener extends AnimListener {
         removeEnemies();
         removeBullets();
         drawMap(gl);
-//        if (Enemies.size()>0)
-//        System.out.println(Enemies.get(0).x+"    "+Enemies.get(0).y);
 
 //        counter1++;
 //        counter2++;
@@ -119,8 +117,7 @@ public class AnimGLEventListener extends AnimListener {
     {
         if((transXcoordinates(planeXposition) >= xbr[i]-0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3) || (transXcoordinates(planeXposition) <= xbl[i]+0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3))
         {
-            planeXposition = maxWidth / 2;
-            planeYposition = 10;
+
         }
     }
 
@@ -208,8 +205,9 @@ public class AnimGLEventListener extends AnimListener {
 
     }
 
-    private void drowPlane(GL gl, double x, double y, int index) {
-        drawSprite(gl, x, y, index, 1);
+    private void drowPlane(GL gl, double x, double y,boolean exist, int index) {
+        if (exist)
+            drawSprite(gl, x, y, index, 1);
     }
 
     public void drawSprite(GL gl, double x, double y, int index, float scale) {
@@ -286,7 +284,7 @@ public class AnimGLEventListener extends AnimListener {
         for (Enemies Enemies : Enemies) {
             for (Bullet bullet : bullets) {
 
-                if (((int) (bullet.x) >= (int) (Enemies.x - 0.3) && (int) (bullet.x) <= (int) (Enemies.x + 0.3)) && ((int) (bullet.y) >= (int) (Enemies.y - 0.1) && (int) (bullet.y) <= (int) (Enemies.y + 0.1))) {
+                if (( bullet.x >=(Enemies.x - 9) &&(bullet.x) <= (Enemies.x + 8)) && ((bullet.y>=  (Enemies.y - 1) &&(bullet.y) <=  (Enemies.y + 2)))) {
                     Enemies.create = false;
                     bullet.fired = false;
                     for (int j = 0; j < 100; j++) {
