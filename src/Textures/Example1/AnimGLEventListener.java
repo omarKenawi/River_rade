@@ -17,6 +17,8 @@ import java.util.Iterator;
 public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 500;
     private static long lastEneny = 0;
+    private static final long createEnemies1 = 500;
+    private static long lastEneny1 = 0;
     //-----------------------------------------bullet--------------------------------------//
     private final int bulletIndex = 4;
     //-----------------------------------------generate--------------------------------------//
@@ -30,9 +32,10 @@ public class AnimGLEventListener extends AnimListener {
     int maxWidth = 110;
     int maxHeight = 110;
     int stop1 = 0;
-    double[] ybr = {0.5,0.4,0.3,0.2,0.1,0,-0.1,-0.2,-0.3,-0.4,-0.5};
-    double[] xbr = {0.1,0.2,0.4,0.1,0.11,0.2,0.25,0.3,0.4,0.1,0};
-    double[] xbl = {0,-0.1,-0.4,-0.3,-0.25,-0.2,-0.11,-0.1,-0.4,-0.2,-0.1};
+    double[] ybr = {0.7,0.625,0.55,0.475,0.4,0.325,0.25,0.175,0.1,0.025,-0.05,-0.125,-0.2,-0.275,-0.35,-0.425,-0.5,-0.575,-0.65,-0.725};
+    double[] ybc = {0.7,0.625,0.55,0.475,0.4,0.325,0.25,0.175,0.1,0.025,-0.05,-0.125,-0.2,-0.275,-0.35,-0.425,-0.5,-0.575,-0.65,-0.725};
+    double[] xbr = {0.54,0.6,0.53,0.55,0.53,0.57,0.6,0.56,0.59,0.54,0.55,0.58,0.55,0.6,0.59,0.53,0.54,0.58,0.53,0.6};
+    double[] xbl = {-0.55,-0.55,-0.53,-0.6,-0.56,-0.6,-0.57,-0.55,-0.59,-0.56,-0.54,-0.6,-0.57,-0.53,-0.55,-0.6,-0.6,-0.57,-0.53,-0.55};
     String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic(),"block.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
@@ -45,6 +48,9 @@ public class AnimGLEventListener extends AnimListener {
     private int animationIndex = 0;
     private double rightXPlaneBoundry = 100, leftXPlaneBoundry = 0;
 
+    int counter2=1;
+    int counter1=100;
+    int counter3=1;
     public AnimGLEventListener() {
 
     }
@@ -100,13 +106,14 @@ public class AnimGLEventListener extends AnimListener {
         removeEnemies();
         removeBullets();
         drawMap(gl);
-
-
+        counter1++;
+        counter2++;
+        counter3++;
     }
 
     private void blocksCollesion(int i)
     {
-        if((transXcoordinates(planeXposition) >= xbr[i] && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.2) || (transXcoordinates(planeXposition) <= xbl[i] && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.2))
+        if((transXcoordinates(planeXposition) >= xbr[i]-0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3) || (transXcoordinates(planeXposition) <= xbl[i]+0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i]+0.3))
         {
             planeXposition = maxWidth / 2;
             planeYposition = 10;
@@ -115,29 +122,54 @@ public class AnimGLEventListener extends AnimListener {
 
     private void generateBlocks(int i)
     {
-        if (ybr[i] < -0.6)
+        if (ybr[i] < -0.75)
         {
-            ybr[i] = 0.5;
-            xbr[i] = getRandomNumber(0.1,0.45);
-            xbl[i] = getRandomNumber(-0.1,-0.45);
+            ybr[i] = 0.7;
+            xbr[i] = getRandomNumber(0.52,0.6);
+            xbl[i] = getRandomNumber(-0.52,-0.6);
+
         }
+        if (ybc[i] < -1.9)
+
+            ybc[i] = 0.7;
     }
 
     private void blocksSpeed(int i , double speed)
     {
         ybr[i] -= speed;
+        ybc[i] -= speed;
     }
 
-    private void drawMap(GL gl)
-    {
-        for (int i = 0;i<=10;i++)
-        {
-            drawblocks(gl,xbr[i],ybr[i],1);
-            drawLeftBlocks(gl,xbl[i],ybr[i],1);
-            blocksSpeed(i,0.01);
+    private void drawMap(GL gl) {
+        for (int i = 0; i <= xbr.length - 1; i++) {
+            drawblocks(gl, xbr[i], ybr[i], 0.6f);
+            drawLeftBlocks(gl, xbl[i], ybr[i], 0.6f);
+            blocksSpeed(i, 0.0075);
             generateBlocks(i);
             blocksCollesion(i);
+
+            if(ybr[i]>=0.575&& counter2>=(int) ((Math.random()*400) + 700) ){
+                xbr[i] = 0.03;
+
+                counter2=0;
+            }
+
+            if( ybr[i]>=0.6 && counter1>=(int) ((Math.random()*400) + 500)){
+                xbl[i]=-0.03;
+                counter1=100;
+            }
+//            if( ybc[j]>=0.6 && counter3>=(int) (Math.random()*400) + 200){
+//
+//                drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
+//            }
+            drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
+
         }
+
+
+
+        System.out.println(counter1+"   "+counter2);
+
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -249,6 +281,7 @@ public class AnimGLEventListener extends AnimListener {
         gl.glEnd();
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
+
     }
 
     //collision between bullet and ship
@@ -303,6 +336,9 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+    public double getRandomNumber(double min, double max) {
+        return  ((Math.random() * (max - min)) + min);
+    }
     private void drawLeftBlocks(GL gl, double x, double y, float scale) {
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
@@ -312,21 +348,33 @@ public class AnimGLEventListener extends AnimListener {
         gl.glBegin(GL.GL_QUADS);
         // Front Face
 //        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f((float)(x-1),(float) y, -1.0f);
+        gl.glVertex3f((float)(x-2),(float) y, -1.0f);
 //        gl.glTexCoord2f(1.0f, 0.0f);
         gl.glVertex3f((float)x, (float) y, -1.0f);
 //        gl.glTexCoord2f(1.0f, 1.0f);
         gl.glVertex3f((float)x, (float)(y+0.2), -1.0f);
 //        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f((float)(x-1), (float)(y+0.2), -1.0f);
+        gl.glVertex3f((float)(x-2), (float)(y+0.2), -1.0f);
         gl.glEnd();
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
-    public double getRandomNumber(double min, double max) {
-        return  ((Math.random() * (max - min)) + min);
+    private void drawCenterBlocks(GL gl, double xl,double xr, double y, float scale) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);    // Turn Blending On
+        gl.glPushMatrix();
+        gl.glTranslated(xl, y, 0);
+        gl.glScaled(  scale,  scale, 1);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glVertex3f((float)xr, (float) y, -1.0f);
+        gl.glVertex3f((float)xl,(float) y, -1.0f);
+        gl.glVertex3f((float)xl, (float)(y+0.15), -1.0f);
+        gl.glVertex3f((float)xr, (float)(y+0.15), -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
     }
-
     public double transXcoordinates(double x)
     {
         if (x >= 50 && x<= 100)

@@ -3,16 +3,18 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/gluegen-rt.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jogl.jar!/" />
-      <root url="jar://C:/JOGLwin/lib64/gluegen-rt.jar!/" />
-      <root url="jar://C:/JOGLwin/lib64/jogl.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="jar://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64/jogl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64/gluegen-rt.jar!/" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>
-      <root url="file://C:/JOGLwin/lib64" />
-      <root url="file://C:/JOGLwin/lib64" />
-      <root url="file://C:/JOGLwin/lib64" />
-      <root url="file://C:/JOGLwin/lib64" />
+      <root url="file://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64" />
+      <root url="file://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64" />
+      <root url="file://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64" />
+      <root url="file://$PROJECT_DIR$/../../../NetBeansProjects/Test/lib/JOGLwin/lib64" />
     </NATIVE>
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
   </library>
 </component>
