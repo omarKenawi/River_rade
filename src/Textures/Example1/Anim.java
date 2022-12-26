@@ -13,7 +13,8 @@ import java.io.*;
 public class Anim extends JFrame {
 
     public static void main(String[] args) throws UnsupportedAudioFileException , IOException,LineUnavailableException {
-        new Anim(new AnimGLEventListener());
+        new HomeEntryPage();
+      //  new Anim(new AnimGLEventListener());
 
     }
 
