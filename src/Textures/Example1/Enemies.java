@@ -8,6 +8,7 @@ public class Enemies {
     private final String firstPic="boat1.png";
     private final String secendPic="boat2.png";
     public boolean isRight = true;
+
     public Enemies(){
     }
     public Enemies( double x, double y, int lifetime){
