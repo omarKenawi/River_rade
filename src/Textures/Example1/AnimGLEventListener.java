@@ -37,7 +37,6 @@ public class AnimGLEventListener extends AnimListener {
     //--------------------------------------------------------------------------------------//
     int maxWidth = 110;
     int maxHeight = 110;
-    int stop1 = 0;
     double[] ybr = {0.7, 0.625, 0.55, 0.475, 0.4, 0.325, 0.25, 0.175, 0.1, 0.025, -0.05, -0.125, -0.2, -0.275, -0.35, -0.425, -0.5, -0.575, -0.65, -0.725};
     double[] ybc = {0.7, 0.625, 0.55, 0.475, 0.4, 0.325, 0.25, 0.175, 0.1, 0.025, -0.05, -0.125, -0.2, -0.275, -0.35, -0.425, -0.5, -0.575, -0.65, -0.725};
     double[] xbr = {0.54, 0.6, 0.53, 0.55, 0.53, 0.57, 0.6, 0.56, 0.59, 0.54, 0.55, 0.58, 0.55, 0.6, 0.59, 0.53, 0.54, 0.58, 0.53, 0.6};
@@ -310,6 +309,12 @@ public class AnimGLEventListener extends AnimListener {
         }
         for (Enemies enemies : Enemies) {
             enemies.validate();
+            int direction = (int) ( Math.random() * 2 +1);
+            if (direction==1&&enemies.y==110) {
+                enemies.isRight = true;
+            } else if (direction==2&&enemies.y==110) {
+                enemies.isRight = false;
+            }
             drawEnemies(gl, enemies.x, enemies.y, 6, 1,enemies.isRight);
 
         }
