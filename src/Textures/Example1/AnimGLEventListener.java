@@ -27,6 +27,7 @@ public class AnimGLEventListener extends AnimListener {
     //-----------------------------------------generate--------------------------------------//
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
+    private Clip clip;
     Benzin ben = new Benzin();
     plane1 plane = new plane1();
     int tank = plane.getMaxFuel();
@@ -77,6 +78,12 @@ public class AnimGLEventListener extends AnimListener {
 
 
     public AnimGLEventListener() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        Open("crash-7075.wav");
+        Open("commercial-aircraft-in-flight-announcement-5-17499.wav");
+        Open("laser-zap-90575.wav");
+        Open("crash-7075.wav");
+        Open("explosion-6055.wav");
+        Open("mixkit-sad-game-over-trombone-471.wav");
 //        gameBeganClip.open(gameBeganAudioStream);
 //        gamePlayClip.open(gamePlayAudioStream);
 //        chotClip.open(shotAudioStream);
@@ -89,6 +96,38 @@ public class AnimGLEventListener extends AnimListener {
 
     //            main method
     public static void main(String[] args) {
+
+    }
+    public void Sound(String name) {
+        try {
+            clip = AudioSystem.getClip();
+            AudioInputStream input = AudioSystem.getAudioInputStream(new File(assetsFolderName + "//" + name).getAbsoluteFile());
+            clip.open(input);
+            clip.start();
+            clip.setMicrosecondPosition(0);
+            if(name.endsWith("blaster-2-81267.wav")){
+                clip.loop(0);
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+    public void Open(String name){
+        try {
+            File A=new File(assetsFolderName + "//" + name);
+            AudioInputStream B = AudioSystem.getAudioInputStream(A);
+            Clip p=AudioSystem.getClip();
+            p.open(B);
+            if(name.equalsIgnoreCase("commercial-aircraft-in-flight-announcement-5-17499.wav")){
+                p.start();
+                p.loop(1);
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
     }
 
@@ -179,6 +218,7 @@ public class AnimGLEventListener extends AnimListener {
         for (Benzin ben : benzine) {
             if ((ben.y <= planeYposition + 3 && ben.y >= planeYposition - 3 && ben.x < planeXposition + 9 && ben.x >= planeXposition - 9)) {
                 tank += 30;
+                Sound("mixkit-retro-game-notification-212.wav");
                 if (tank > plane.getMaxFuel())
                     tank = plane.getMaxFuel();
             }
@@ -214,13 +254,15 @@ public class AnimGLEventListener extends AnimListener {
     private void blocksCollesion(int i) {
         if ((transXcoordinates(planeXposition) >= xbr[i] - 0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i] + 0.3) || (transXcoordinates(planeXposition) <= xbl[i] + 0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i] + 0.3)) {
             {
-//                gameOverClip.start();
-                isExist =false;
+                Sound("mixkit-sad-game-over-trombone-471.wav");
+                isExist = false;
+
                 System.exit(0);
             }
 
         }
     }
+
 
 
     private void generateBlocks(int i) {
@@ -382,7 +424,9 @@ public class AnimGLEventListener extends AnimListener {
         for (Enemies Enemies : Enemies) {
             for (Bullet bullet : bullets) {
                 if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
-//                    clipHit.start();
+                    //hereeeeeeeeeeeeeeeeeeeeeeeeeee
+                    Sound("explosion-6055.wav");
+//                   clipHit.start();
                     Enemies.create = false;
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
@@ -398,10 +442,12 @@ public class AnimGLEventListener extends AnimListener {
                 if ((bullet.x >= (fuel.x - 3) && (bullet.x) <= (fuel.x + 3)) && ((bullet.y >= (fuel.y - 1) && (bullet.y) <= (fuel.y + 2)))) {
                     fuel.create = false;
                     bullet.fired = false;
+                    Sound("explosion-6055.wav");
                     drawSprite(gl, fuel.x, fuel.y, 3, 3f);
                     for (Enemies Enemies : Enemies) {
                         if (zone(Enemies.x, Enemies.y, fuel.x, fuel.y) <= 30.0) {
 //                            clipHit.start();
+//                  Sound("explosion-6055.wav");
                             Enemies.create = false;
                             score += 20;
                             drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
@@ -418,12 +464,14 @@ public class AnimGLEventListener extends AnimListener {
         }
 
     }
-
     private void resolvePlaneCollision(GL gl) {
         for (Enemies Enemies : Enemies) {
             if ((Enemies.y < planeYposition + 4 && Enemies.y >= planeYposition - 4 && Enemies.x < planeXposition + 4 && Enemies.x >= planeXposition - 4)
                     || planeYposition + 4 == Enemies.y && Enemies.x <= (planeXposition + 9) && Enemies.x >= (planeXposition - 9)
             ) {
+
+                Sound("mixkit-sad-game-over-trombone-471.wav");
+
 //                shotClip.start();
 //                shotClip.getMicrosecondLength();
                 isExist = false;
@@ -502,16 +550,18 @@ public class AnimGLEventListener extends AnimListener {
         }
 
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
+
 //            shotClip.start();
             if (lastBulletFired + fireRate < System.currentTimeMillis()) {
                 lastBulletFired = System.currentTimeMillis();
                 bullets.add(new Bullet(planeXposition, planeYposition, 1500));
 //                shotClip.loop(1);
-
+                Sound("GunShotSnglShotIn PE1097906.wav");
             }
 
         }
     }
+
 
     @Override
     public void keyPressed(final KeyEvent event) {
