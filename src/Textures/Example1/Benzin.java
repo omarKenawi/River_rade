@@ -5,7 +5,7 @@ public class Benzin {
     public double x, y;
     boolean create;
     double initX, initY;
-    private final String firstPic="Balloon1.png";
+    private final String firstPic="full.png";
     public Benzin(){
     }
     public Benzin( double x, double y, int lifetime){
