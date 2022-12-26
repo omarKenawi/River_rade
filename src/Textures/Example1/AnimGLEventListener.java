@@ -8,6 +8,8 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.BitSet;
 public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 1000;
     private static final long createBenzine = 5357;
+    private Timer Timer;
+    private long counter=0;
 
     private static long lastBenzine = 0;
     private static long lastEnemy = 0;
@@ -98,6 +102,7 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     public void init(GLAutoDrawable gld) {
+newGame();
         GL gl = gld.getGL();
         //This Will Clear The Background Color To Blue
         gl .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -145,6 +150,7 @@ public class AnimGLEventListener extends AnimListener {
         displayVar(g,gld);
         distance();
         EndGame();
+
     }
     private void displayVar(GLUT g,GLAutoDrawable gld){
         GL gl2 = gld.getGL();
@@ -154,8 +160,16 @@ public class AnimGLEventListener extends AnimListener {
         g.glutBitmapString(5, Integer.toString(score));
         gl2.glRasterPos2f(-.8f, .8f);
         g.glutBitmapString(5, "tank  ");
+
         g.glutBitmapString(5, Integer.toString(tank/10));
+        gl2.glRasterPos2f(-.8f, .7f);
+        g.glutBitmapString(5, "Timer  ");
+
+        g.glutBitmapString(5, Long.toString(counter));
+
         gl2.glEnd();
+
+
     }
 
     private void EndGame() {
@@ -267,7 +281,18 @@ public class AnimGLEventListener extends AnimListener {
         }
 
     }
+    public void newGame() {
+        Timer = new Timer(900, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //start counter in text field
+                counter++;
+                System.out.println(counter);
 
+            }
+        });
+        Timer.start();
+    }
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 
