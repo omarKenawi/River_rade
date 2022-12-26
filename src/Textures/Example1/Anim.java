@@ -33,7 +33,7 @@ public class Anim extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 1000);
         setLocationRelativeTo(null);
-        setVisible(true);
+          setVisible(true);
         setFocusable(true);
         glcanvas.requestFocus();
     }

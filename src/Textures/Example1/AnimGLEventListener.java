@@ -2,7 +2,7 @@ package Textures.Example1;
 
 import Textures.AnimListener;
 import Textures.TextureReader;
-
+import com.sun.opengl.util.GLUT;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -32,6 +32,7 @@ public class AnimGLEventListener extends AnimListener {
     int tank = plane.getMaxFuel();
     boolean isExist = plane.isExist();
     Enemies entity = new Enemies();
+    GLUT g = new GLUT();
     //--------------------------------------------------------------------------------------//
     int maxWidth = 110;
     int maxHeight = 110;
@@ -48,25 +49,25 @@ public class AnimGLEventListener extends AnimListener {
     ArrayList<Benzin> benzine = new ArrayList<>();
     int counter2 = 1;
     int counter1 = 100;
-    File gameBegan = new File("Assets/dramatic-reveal-21469.wav");
-    File gamePlay = new File("Assets/commercial-aircraft-in-flight-announcement-5-17499.wav");
-    File shot = new File("Assets/laser-zap-90575.wav");
-    File hit = new File("Assets/explosion-6055.wav");
-    File Crash = new File("Assets/crash-7075.wav");
-    File gameOver = new File("Assets/mixkit-sad-game-over-trombone-471.wav");
-    AudioInputStream gameBeganAudioStream = AudioSystem.getAudioInputStream(gameBegan);
-    AudioInputStream gamePlayAudioStream = AudioSystem.getAudioInputStream(gamePlay);
-    AudioInputStream shotAudioStream = AudioSystem.getAudioInputStream(shot);
-    AudioInputStream hitAudioStream = AudioSystem.getAudioInputStream(hit);
-    AudioInputStream crashAudioStream = AudioSystem.getAudioInputStream(Crash);
-    AudioInputStream gameOverAudioStream = AudioSystem.getAudioInputStream(gameOver);
-    Clip gameBeganClip = AudioSystem.getClip();
-    Clip gamePlayClip = AudioSystem.getClip();
-    Clip chotClip = AudioSystem.getClip();
-    Clip shotClip = AudioSystem.getClip();
-    Clip clipHit = AudioSystem.getClip();
-    Clip gameOverClip = AudioSystem.getClip();
-    private long score = 0;
+//    File gameBegan = new File("Assets/dramatic-reveal-21469.wav");
+//    File gamePlay = new File("Assets/commercial-aircraft-in-flight-announcement-5-17499.wav");
+//    File shot = new File("Assets/laser-zap-90575.wav");
+//    File hit = new File("Assets/explosion-6055.wav");
+//    File Crash = new File("Assets/crash-7075.wav");
+//    File gameOver = new File("Assets/mixkit-sad-game-over-trombone-471.wav");
+//    AudioInputStream gameBeganAudioStream = AudioSystem.getAudioInputStream(gameBegan);
+//    AudioInputStream gamePlayAudioStream = AudioSystem.getAudioInputStream(gamePlay);
+//    AudioInputStream shotAudioStream = AudioSystem.getAudioInputStream(shot);
+//    AudioInputStream hitAudioStream = AudioSystem.getAudioInputStream(hit);
+//    AudioInputStream crashAudioStream = AudioSystem.getAudioInputStream(Crash);
+//    AudioInputStream gameOverAudioStream = AudioSystem.getAudioInputStream(gameOver);
+//    Clip gameBeganClip = AudioSystem.getClip();
+//    Clip gamePlayClip = AudioSystem.getClip();
+//    Clip chotClip = AudioSystem.getClip();
+//    Clip shotClip = AudioSystem.getClip();
+//    Clip clipHit = AudioSystem.getClip();
+//    Clip gameOverClip = AudioSystem.getClip();
+    private int score = 0;
     private long lastBulletFired = 0;
     private long fireRate = 500;
     private double planeXposition = maxWidth / 2;
@@ -76,14 +77,14 @@ public class AnimGLEventListener extends AnimListener {
 
 
     public AnimGLEventListener() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        gameBeganClip.open(gameBeganAudioStream);
-        gamePlayClip.open(gamePlayAudioStream);
-        chotClip.open(shotAudioStream);
-        shotClip.open(crashAudioStream);
-        clipHit.open(hitAudioStream);
-        gameOverClip.open(gameOverAudioStream);
-        gamePlayClip.start();
-        gamePlayClip.loop(1);
+//        gameBeganClip.open(gameBeganAudioStream);
+//        gamePlayClip.open(gamePlayAudioStream);
+//        chotClip.open(shotAudioStream);
+//        shotClip.open(crashAudioStream);
+//        clipHit.open(hitAudioStream);
+//        gameOverClip.open(gameOverAudioStream);
+//        gamePlayClip.start();
+//        gamePlayClip.loop(1);
     }
 
     //            main method
@@ -94,7 +95,7 @@ public class AnimGLEventListener extends AnimListener {
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         //This Will Clear The Background Color To Blue
-        gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
+        gl .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glGenTextures(textureNames.length, textures, 0);
@@ -118,16 +119,14 @@ public class AnimGLEventListener extends AnimListener {
 
     public void display(GLAutoDrawable gld) {
         GL gl = gld.getGL();
+        gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
-
-
         moveEnemies();
         moveBullets();
         moveBenzin();
         handleKeyPress();
         drowPlane(gl, planeXposition, planeYposition, animationIndex);
-
         CreateEnemies(gl);
         Benzin(gl);
         burningFuel();
@@ -141,7 +140,11 @@ public class AnimGLEventListener extends AnimListener {
         drawMap(gl);
         EndGame();
         System.out.println(score);
-
+        GL gl2 = gld.getGL();
+        gl2 .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+        gl2.glRasterPos2f(-.8f, .9f);
+        g.glutBitmapString(5, "Score");
+        g.glutBitmapString(5, Integer.toString(score));
 
     }
 
@@ -207,7 +210,7 @@ public class AnimGLEventListener extends AnimListener {
     private void blocksCollesion(int i) {
         if ((transXcoordinates(planeXposition) >= xbr[i] - 0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i] + 0.3) || (transXcoordinates(planeXposition) <= xbl[i] + 0.09 && transYcoordinates(planeYposition) >= ybr[i] && transYcoordinates(planeYposition) <= ybr[i] + 0.3)) {
             {
-                gameOverClip.start();
+//                gameOverClip.start();
                 isExist =false;
                 System.exit(0);
             }
@@ -375,12 +378,12 @@ public class AnimGLEventListener extends AnimListener {
         for (Enemies Enemies : Enemies) {
             for (Bullet bullet : bullets) {
                 if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
-                    clipHit.start();
+//                    clipHit.start();
                     Enemies.create = false;
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                     score += 10;
-                    clipHit.setMicrosecondPosition(0);
+//                    clipHit.setMicrosecondPosition(0);
                     break outer;
                 }
             }
@@ -394,11 +397,11 @@ public class AnimGLEventListener extends AnimListener {
                     drawSprite(gl, fuel.x, fuel.y, 3, 3f);
                     for (Enemies Enemies : Enemies) {
                         if (zone(Enemies.x, Enemies.y, fuel.x, fuel.y) <= 30.0) {
-                            clipHit.start();
+//                            clipHit.start();
                             Enemies.create = false;
                             score += 20;
                             drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
-                            clipHit.setMicrosecondPosition(0);
+//                            clipHit.setMicrosecondPosition(0);
                         }
 
                     }
@@ -417,8 +420,8 @@ public class AnimGLEventListener extends AnimListener {
             if ((Enemies.y < planeYposition + 4 && Enemies.y >= planeYposition - 4 && Enemies.x < planeXposition + 4 && Enemies.x >= planeXposition - 4)
                     || planeYposition + 4 == Enemies.y && Enemies.x <= (planeXposition + 9) && Enemies.x >= (planeXposition - 9)
             ) {
-                shotClip.start();
-                shotClip.getMicrosecondLength();
+//                shotClip.start();
+//                shotClip.getMicrosecondLength();
                 isExist = false;
             }
         }
@@ -495,11 +498,11 @@ public class AnimGLEventListener extends AnimListener {
         }
 
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
-            shotClip.start();
+//            shotClip.start();
             if (lastBulletFired + fireRate < System.currentTimeMillis()) {
                 lastBulletFired = System.currentTimeMillis();
                 bullets.add(new Bullet(planeXposition, planeYposition, 1500));
-                shotClip.loop(1);
+//                shotClip.loop(1);
 
             }
 
