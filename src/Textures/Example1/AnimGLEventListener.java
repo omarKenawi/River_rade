@@ -250,8 +250,6 @@ newGame();
             {
                 Sound("mixkit-sad-game-over-trombone-471.wav");
                 isExist = false;
-
-                System.exit(0);
             }
 
         }
