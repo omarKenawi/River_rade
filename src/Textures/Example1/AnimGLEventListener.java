@@ -49,24 +49,7 @@ public class AnimGLEventListener extends AnimListener {
     ArrayList<Benzin> benzine = new ArrayList<>();
     int counter2 = 1;
     int counter1 = 100;
-//    File gameBegan = new File("Assets/dramatic-reveal-21469.wav");
-//    File gamePlay = new File("Assets/commercial-aircraft-in-flight-announcement-5-17499.wav");
-//    File shot = new File("Assets/laser-zap-90575.wav");
-//    File hit = new File("Assets/explosion-6055.wav");
-//    File Crash = new File("Assets/crash-7075.wav");
-//    File gameOver = new File("Assets/mixkit-sad-game-over-trombone-471.wav");
-//    AudioInputStream gameBeganAudioStream = AudioSystem.getAudioInputStream(gameBegan);
-//    AudioInputStream gamePlayAudioStream = AudioSystem.getAudioInputStream(gamePlay);
-//    AudioInputStream shotAudioStream = AudioSystem.getAudioInputStream(shot);
-//    AudioInputStream hitAudioStream = AudioSystem.getAudioInputStream(hit);
-//    AudioInputStream crashAudioStream = AudioSystem.getAudioInputStream(Crash);
-//    AudioInputStream gameOverAudioStream = AudioSystem.getAudioInputStream(gameOver);
-//    Clip gameBeganClip = AudioSystem.getClip();
-//    Clip gamePlayClip = AudioSystem.getClip();
-//    Clip chotClip = AudioSystem.getClip();
-//    Clip shotClip = AudioSystem.getClip();
-//    Clip clipHit = AudioSystem.getClip();
-//    Clip gameOverClip = AudioSystem.getClip();
+
     private int score = 0;
     private long lastBulletFired = 0;
     private long fireRate = 500;
