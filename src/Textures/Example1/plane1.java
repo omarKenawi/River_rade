@@ -4,6 +4,8 @@ public class plane1 {
     private final String firstPic="plane_1.png";
     private final String secendPic="plane_2.png";
     private final String triedPic="plane_3.png";
+    private boolean isExist=true;
+    private final int maxFull = 1000;
     private final double planeSpeed = 3;
 
     private final   String planeBoomed="plane_boom.png";
@@ -13,6 +15,15 @@ public class plane1 {
     public plane1() {
 
     }
+
+    public boolean isExist() {
+        return isExist;
+    }
+
+    public int getMaxFull() {
+        return maxFull;
+    }
+
     public String getBulletPic() {
         return bulletPic;
     }
