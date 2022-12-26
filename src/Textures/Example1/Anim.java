@@ -5,12 +5,14 @@ import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.FPSAnimator;
 
 import javax.media.opengl.GLCanvas;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 public class Anim extends JFrame {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedAudioFileException , IOException,LineUnavailableException {
         new Anim(new AnimGLEventListener());
 
     }
