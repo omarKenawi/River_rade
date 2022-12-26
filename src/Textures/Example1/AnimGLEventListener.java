@@ -144,6 +144,7 @@ public class AnimGLEventListener extends AnimListener {
         generateBullets(gl);
         resolveBulletCollision(gl);
         resolvePlaneCollision(gl);
+        resolveBenzinCollision(gl);
         removeEnemies();
         removeBullets();
         removeBenzin();
@@ -381,6 +382,11 @@ public class AnimGLEventListener extends AnimListener {
         gl.glDisable(GL.GL_BLEND);
 
     }
+    private double zone (double x,double y,double a, double b){
+        double r =0 ;
+         r =Math.sqrt(Math.pow((x-a),2)+Math.pow((y-b),2));
+         return r;
+    }
 
     //collision between bullet and ship
     private void resolveBulletCollision(GL gl) {
@@ -396,6 +402,27 @@ public class AnimGLEventListener extends AnimListener {
                     break outer;
                 }
             }
+        }
+
+        for (Benzin full : benzin) {
+            for (Bullet bullet : bullets) {
+                if (( bullet.x >=(full.x - 3) &&(bullet.x) <= (full.x + 3)) && ((bullet.y>=  (full.y - 1) &&(bullet.y) <=  (full.y + 2)))) {
+                    full.create = false;
+                    bullet.fired = false;
+                    drawSprite(gl, full.x, full.y, 3, 3f);
+                    for (Enemies Enemies : Enemies) {
+                        if (zone(Enemies.x,Enemies.y,full.x,full.y)<=30.0){
+                            Enemies.create = false;
+                            drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                        }
+
+                    }
+
+
+                }
+            }
+
+
         }
 
     }
