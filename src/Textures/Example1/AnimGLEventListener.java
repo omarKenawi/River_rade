@@ -55,12 +55,12 @@ public class AnimGLEventListener extends AnimListener {
     int counter1=100;
     int counter3=1;
 
-    File game_began= new File("dramatic-reveal-21469.wav");
-    File game_play= new File("commercial-aircraft-in-flight-announcement-5-17499.wav");
-    File shot= new File("laser-zap-90575.wav");
-    File hit= new File("explosion-6055.wav");
-    File Crash= new File("crash-7075.wav");
-    File game_Over= new File("mixkit-sad-game-over-trombone-471.wav");
+    File game_began= new File("Assets/dramatic-reveal-21469.wav");
+    File game_play= new File("Assets/commercial-aircraft-in-flight-announcement-5-17499.wav");
+    File shot= new File("Assets/laser-zap-90575.wav");
+    File hit= new File("Assets/explosion-6055.wav");
+    File Crash= new File("Assets/crash-7075.wav");
+    File game_Over= new File("Assets/mixkit-sad-game-over-trombone-471.wav");
 
     AudioInputStream audioStreamgb= AudioSystem.getAudioInputStream(game_began);
     AudioInputStream audioStreamgp= AudioSystem.getAudioInputStream(game_play);
