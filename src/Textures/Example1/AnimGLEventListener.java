@@ -143,8 +143,12 @@ public class AnimGLEventListener extends AnimListener {
         GL gl2 = gld.getGL();
         gl2 .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         gl2.glRasterPos2f(-.8f, .9f);
-        g.glutBitmapString(5, "Score");
+        g.glutBitmapString(5, "Score ");
         g.glutBitmapString(5, Integer.toString(score));
+
+        gl.glRasterPos2f(-.8f, .8f);
+        g.glutBitmapString(5, "tank  ");
+        g.glutBitmapString(5, Integer.toString(tank/10));
 
     }
 
