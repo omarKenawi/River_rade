@@ -30,7 +30,7 @@ public class Anim extends JFrame {
         animator.add(glcanvas);
         animator.start();
 
-        setTitle("Anim Test");
+        setTitle("River raid");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 1000);
         setLocationRelativeTo(null);

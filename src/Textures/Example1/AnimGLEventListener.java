@@ -617,6 +617,12 @@ public class AnimGLEventListener extends AnimListener {
                 Sound("GunShotSnglShotIn PE1097906.wav");
             }
         }
+        if (isKeyPressed((KeyEvent.VK_F))){
+            System.out.println("you find the free bug");
+            JOptionPane.showMessageDialog(null, "game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
+            System.exit(0);
+
+        }
     }
 
     private void distance() {
