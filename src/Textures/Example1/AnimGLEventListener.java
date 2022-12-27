@@ -21,14 +21,13 @@ public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 1000;
     private static final long createEnemies2 = 1346;
     private static final long createBenzine = 5357;
-    private long counter=0;
-
     private static long lastBenzine = 0;
-    private static long lastEnemy1 = 0,lastEnemy2=0;
-    boolean choose = true;
+    private static long lastEnemy1 = 0, lastEnemy2 = 0;
+    private final double planeYPosition = 10;
     //-----------------------------------------generate--------------------------------------//
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
+    boolean choose = true;
     Benzin ben = new Benzin();
     plane1 plane = new plane1();
     int tank = plane.getMaxFuel();
@@ -44,7 +43,7 @@ public class AnimGLEventListener extends AnimListener {
     double[] xbr = {0.54, 0.6, 0.53, 0.55, 0.53, 0.57, 0.6, 0.56, 0.59, 0.54, 0.55, 0.58, 0.55, 0.6, 0.59, 0.53, 0.54, 0.58, 0.53, 0.6};
     double[] xbl = {-0.55, -0.55, -0.53, -0.6, -0.56, -0.6, -0.57, -0.55, -0.59, -0.56, -0.54, -0.6, -0.57, -0.53, -0.55, -0.6, -0.6, -0.57, -0.53, -0.55};
     //                        0                   1                       2                        3                       4                     5                         6                                      7                     8            9
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), FirstEnemies.getFirstPic(), FirstEnemies.getSecendPic(),secondEnemies.getFirstPic(), "block.png", ben.getFirstPic()};
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), FirstEnemies.getFirstPic(), FirstEnemies.getSecendPic(), secondEnemies.getFirstPic(), "block.png", ben.getFirstPic()};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     ArrayList<Enemies> firstEnemy = new ArrayList<>();
@@ -53,10 +52,10 @@ public class AnimGLEventListener extends AnimListener {
     ArrayList<Benzin> benzine = new ArrayList<>();
     int counter2 = 1;
     int counter1 = 100;
+    private long counter = 0;
     private int score = 0;
     private long lastBulletFired = 0;
     private double planeXPosition = maxWidth / 2.0;
-    private final double planeYPosition = 10;
     private int animationIndex = 0;
 
 
@@ -73,6 +72,7 @@ public class AnimGLEventListener extends AnimListener {
     public static void main(String[] args) {
 
     }
+
     public void Sound(String name) {
         try {
             Clip clip = AudioSystem.getClip();
@@ -80,37 +80,36 @@ public class AnimGLEventListener extends AnimListener {
             clip.open(input);
             clip.start();
             clip.setMicrosecondPosition(0);
-            if(name.endsWith("blaster-2-81267.wav")){
+            if (name.endsWith("blaster-2-81267.wav")) {
                 clip.loop(0);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
     }
-    public void Open(String name){
+
+    public void Open(String name) {
         try {
-            File A=new File(assetsFolderName + "//" + name);
+            File A = new File(assetsFolderName + "//" + name);
             AudioInputStream B = AudioSystem.getAudioInputStream(A);
-            Clip p=AudioSystem.getClip();
+            Clip p = AudioSystem.getClip();
             p.open(B);
-            if(name.equalsIgnoreCase("commercial-aircraft-in-flight-announcement-5-17499.wav")){
+            if (name.equalsIgnoreCase("commercial-aircraft-in-flight-announcement-5-17499.wav")) {
                 p.start();
                 p.loop(1);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
     }
 
     public void init(GLAutoDrawable gld) {
-newGame();
+        newGame();
         GL gl = gld.getGL();
         //This Will Clear The Background Color To Blue
-        gl .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glGenTextures(textureNames.length, textures, 0);
@@ -132,40 +131,41 @@ newGame();
 
 
     public void display(GLAutoDrawable gld) {
-            GL gl = gld.getGL();
-            gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
-            gl.glLoadIdentity();
-            drawMap(gl);
-            moveEnemies();
-            moveBullets();
-            moveBenzine();
-            handleKeyPress();
-            drawPlane(gl, planeXPosition, animationIndex);
-            CreateEnemies(gl);
-            Benzine(gl);
-            burningFuel();
-            generateBullets(gl);
-            resolveBulletCollision(gl);
-            resolvePlaneCollision();
-            resolveBenzineCollision();
-            removeEnemies();
-            removeBullets();
-            removeBenzine();
-            displayVar(g, gld);
-            distance();
-            EndGame();
+        GL gl = gld.getGL();
+        gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
+        gl.glLoadIdentity();
+        drawMap(gl);
+        moveEnemies();
+        moveBullets();
+        moveBenzine();
+        handleKeyPress();
+        drawPlane(gl, planeXPosition, animationIndex);
+        CreateEnemies(gl);
+        Benzine(gl);
+        burningFuel();
+        generateBullets(gl);
+        resolveBulletCollision(gl);
+        resolvePlaneCollision();
+        resolveBenzineCollision();
+        removeEnemies();
+        removeBullets();
+        removeBenzine();
+        displayVar(g, gld);
+        distance();
+        EndGame();
     }
-    private void displayVar(GLUT g,GLAutoDrawable gld){
+
+    private void displayVar(GLUT g, GLAutoDrawable gld) {
         GL gl2 = gld.getGL();
-        gl2 .glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+        gl2.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         gl2.glRasterPos2f(-.8f, .9f);
         g.glutBitmapString(5, "Score ");
         g.glutBitmapString(5, Integer.toString(score));
         gl2.glRasterPos2f(-.8f, .8f);
         g.glutBitmapString(5, "tank  ");
 
-        g.glutBitmapString(5, Integer.toString(tank/17));
+        g.glutBitmapString(5, Integer.toString(tank / 17));
         gl2.glRasterPos2f(-.8f, .7f);
         g.glutBitmapString(5, "Timer  ");
 
@@ -179,8 +179,7 @@ newGame();
     private void EndGame() {
         if (!isExist) {
             System.out.println("GameOver");
-            JOptionPane.showMessageDialog(null, "GameOver.", "GameOver",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "GameOver.", "GameOver", JOptionPane.WARNING_MESSAGE);
             System.exit(0);
         }
     }
@@ -204,8 +203,7 @@ newGame();
             if ((ben.y <= planeYPosition + 3 && ben.y >= planeYPosition - 3 && ben.x < planeXPosition + 9 && ben.x >= planeXPosition - 9)) {
                 tank += 30;
                 Sound("mixkit-retro-game-notification-212.wav");
-                if (tank > plane.getMaxFuel())
-                    tank = plane.getMaxFuel();
+                if (tank > plane.getMaxFuel()) tank = plane.getMaxFuel();
             }
         }
 
@@ -224,10 +222,8 @@ newGame();
     }
 
     private void burningFuel() {
-        if (tank > 0)
-            tank--;
-        if (tank <= 0)
-            isExist = false;
+        if (tank > 0) tank--;
+        if (tank <= 0) isExist = false;
     }
 
 
@@ -240,7 +236,6 @@ newGame();
 
         }
     }
-
 
 
     private void generateBlocks(int i) {
@@ -283,6 +278,7 @@ newGame();
         }
 
     }
+
     public void newGame() {
         //start counter in text field
         javax.swing.Timer timer = new Timer(900, e -> {
@@ -293,6 +289,7 @@ newGame();
         });
         timer.start();
     }
+
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 
@@ -305,8 +302,8 @@ newGame();
         }
         for (Textures.Example1.Enemies2 enemy : secondEnemy) {
             enemy.y -= 1;
-            enemy.x+=3;
-            enemy.x%=110;
+            enemy.x += 3;
+            enemy.x %= 110;
 
         }
 
@@ -327,21 +324,20 @@ newGame();
                 firstEnemy.add(new Enemies(10 + ((int) (Math.random() * 80)), 0, 2 * 2600));
                 choose = false;
             }
-        }
-        else if (lastEnemy2 + createEnemies2 < System.currentTimeMillis()) {
+        } else if (lastEnemy2 + createEnemies2 < System.currentTimeMillis()) {
             lastEnemy2 = System.currentTimeMillis();
-            secondEnemy.add(new Enemies2( 0, +20, 2 * 2600));
-            choose=true;
+            secondEnemy.add(new Enemies2(0, +20, 2 * 2600));
+            choose = true;
         }
         for (Enemies enemies : firstEnemy) {
             enemies.validate();
-            int direction = (int) ( Math.random() * 2 +1);
-            if (direction==1&&enemies.y==110) {
+            int direction = (int) (Math.random() * 2 + 1);
+            if (direction == 1 && enemies.y == 110) {
                 enemies.isRight = true;
-            } else if (direction==2&&enemies.y==110) {
+            } else if (direction == 2 && enemies.y == 110) {
                 enemies.isRight = false;
             }
-            drawFirstEnemies(gl, enemies.x, enemies.y, 6, 1,enemies.isRight);
+            drawFirstEnemies(gl, enemies.x, enemies.y, 6, 1, enemies.isRight);
 
         }
         for (Enemies2 enemies : secondEnemy) {
@@ -352,12 +348,10 @@ newGame();
 
 
     }
+
     public void drawFirstEnemies(GL gl, double x, double y, int index, float scale, boolean right) {
-        if (right)
-            if (index==5)
-               index++;
-        else if (index==6)
-            index--;
+        if (right) if (index == 5) index++;
+        else if (index == 6) index--;
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);    // Turn Blending On
         gl.glPushMatrix();
@@ -463,6 +457,18 @@ newGame();
                 }
             }
         }
+        for (Enemies2 Enemies : secondEnemy) {
+            for (Bullet bullet : bullets) {
+                if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
+                    Sound("explosion-6055.wav");
+
+                    Enemies.create = false;
+                    bullet.fired = false;
+                    drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                    score += 50;
+                }
+            }
+        }
 
         for (Benzin fuel : benzine) {
             for (Bullet bullet : bullets) {
@@ -474,7 +480,7 @@ newGame();
                     for (Enemies Enemies : firstEnemy) {
                         if (zone(Enemies.x, Enemies.y, fuel.x, fuel.y) <= 30.0) {
                             Enemies.create = false;
-                            score += 20;
+                            score += 30;
                             drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                         }
 
@@ -488,12 +494,17 @@ newGame();
         }
 
     }
+
     private void resolvePlaneCollision() {
         for (Enemies Enemies : firstEnemy) {
-            if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4)
-                    || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)
-            ) {
+            if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
 
+                Sound("mixkit-sad-game-over-trombone-471.wav");
+                isExist = false;
+            }
+        }
+        for (Enemies2 Enemies : secondEnemy) {
+            if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
                 Sound("mixkit-sad-game-over-trombone-471.wav");
                 isExist = false;
             }
@@ -559,17 +570,13 @@ newGame();
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
             animationIndex = 2;
             double leftXPlaneBoundry = 0;
-            if (planeXPosition > leftXPlaneBoundry)
-                planeXPosition -= plane.getPlaneSpeed();
-            if (planeXPosition < leftXPlaneBoundry)
-                planeXPosition = leftXPlaneBoundry;
+            if (planeXPosition > leftXPlaneBoundry) planeXPosition -= plane.getPlaneSpeed();
+            if (planeXPosition < leftXPlaneBoundry) planeXPosition = leftXPlaneBoundry;
         } else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
             animationIndex = 1;
             double rightXPlaneBoundry = 100;
-            if (planeXPosition < rightXPlaneBoundry)
-                planeXPosition += plane.getPlaneSpeed();
-            if (planeXPosition > rightXPlaneBoundry)
-                planeXPosition = rightXPlaneBoundry;
+            if (planeXPosition < rightXPlaneBoundry) planeXPosition += plane.getPlaneSpeed();
+            if (planeXPosition > rightXPlaneBoundry) planeXPosition = rightXPlaneBoundry;
         }
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
             long fireRate = 500;
@@ -580,6 +587,7 @@ newGame();
             }
         }
     }
+
     private void distance() {
         for (Enemies Enemies : firstEnemy) {
             System.out.println("Enemies.x" + Enemies.x);

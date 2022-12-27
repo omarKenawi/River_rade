@@ -1,41 +1,21 @@
 package Textures.Example1;
 
 import Textures.AnimListener;
-
-import java.awt.*;
-import java.awt.event.*;
-
 import com.sun.opengl.util.FPSAnimator;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import javax.media.opengl.*;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-//import static GlutObjectsApp.animator;
-import javax.swing.ImageIcon;
-import java.awt.BorderLayout;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
+import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-//
-//import com.jogamp.opengl.*;
-//import com.jogamp.opengl.awt.GLCanvas;
-//import com.jogamp.opengl.util.FPSAnimator;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
 public class HomeEntryPage extends AnimListener implements GLEventListener, ActionListener {
    public int count = 0;
 
-    Anim a ;
     AnimGLEventListener ar;
 
     {
