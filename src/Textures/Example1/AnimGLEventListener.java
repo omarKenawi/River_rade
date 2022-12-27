@@ -237,7 +237,13 @@ public class AnimGLEventListener extends AnimListener {
 
     private void burningFuel() {
         if (tank > 0) tank--;
-        if (tank <= 0) isExist = false;
+        if (tank <= 0)             {
+            lives--;
+            tank=plane.getMaxFuel();
+            Sound("mixkit-sad-game-over-trombone-471.wav");
+            planeXPosition = maxWidth / 2;
+            if (lives <= 0) isExist = false;
+        }
     }
 
 
@@ -245,6 +251,7 @@ public class AnimGLEventListener extends AnimListener {
         if ((transXcoordinates(planeXPosition) >= xbr[i] - 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3) || (transXcoordinates(planeXPosition) <= xbl[i] + 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3)) {
             {
                 lives--;
+                tank=plane.getMaxFuel();
                 Sound("mixkit-sad-game-over-trombone-471.wav");
                 planeXPosition = maxWidth / 2;
                 if (lives <= 0) isExist = false;
@@ -468,6 +475,7 @@ public class AnimGLEventListener extends AnimListener {
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                     score += 10;
+                    tank=plane.getMaxFuel();
                     break outer;
                 }
             }
@@ -476,7 +484,7 @@ public class AnimGLEventListener extends AnimListener {
             for (Bullet bullet : bullets) {
                 if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
                     Sound("explosion-6055.wav");
-
+                    tank=plane.getMaxFuel();
                     Enemies.create = false;
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
@@ -518,6 +526,7 @@ public class AnimGLEventListener extends AnimListener {
                 drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                 Enemies.create = false;
                 planeXPosition = maxWidth / 2;
+                tank=plane.getMaxFuel();
                 if (lives <= 0) isExist = false;
             }
         }
