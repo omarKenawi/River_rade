@@ -14,7 +14,7 @@ public class Anim extends JFrame {
 
     public static void main(String[] args) throws UnsupportedAudioFileException , IOException,LineUnavailableException {
         new HomeEntryPage();
-      //  new Anim(new AnimGLEventListener());
+      //  new Anim(new NormalGame());
 
     }
 

@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 
-public class AnimGLEventListener extends AnimListener {
+public class hackerMode extends AnimListener {
     private static final long createEnemies = 1000;
     private static final long createEnemies2 = 1346;
     private static final long createBenzine = 5357;
@@ -62,7 +62,7 @@ public class AnimGLEventListener extends AnimListener {
     private int animationIndex = 0;
 
 
-    public AnimGLEventListener() {
+    public hackerMode() {
         Open("crash-7075.wav");
         Open("commercial-aircraft-in-flight-announcement-5-17499.wav");
         Open("laser-zap-90575.wav");
@@ -149,7 +149,7 @@ public class AnimGLEventListener extends AnimListener {
         burningFuel();
         generateBullets(gl);
         resolveBulletCollision(gl);
-        resolvePlaneCollision(gl);
+//        resolvePlaneCollision(gl);
         resolveBenzineCollision();
         removeEnemies();
         removeBullets();
@@ -173,9 +173,9 @@ public class AnimGLEventListener extends AnimListener {
         g.glutBitmapString(5, "Score ");
         g.glutBitmapString(5, Integer.toString(score));
         gl2.glRasterPos2f(-.8f, .84f);
-        g.glutBitmapString(5, "tank  ");
+        g.glutBitmapString(5, "tank  OO");
 
-        g.glutBitmapString(5, Integer.toString(tank / 17));
+//        g.glutBitmapString(5, Integer.toString(tank / 17));
         gl2.glRasterPos2f(-.8f, .77f);
         g.glutBitmapString(5, "Timer  ");
 
@@ -236,9 +236,9 @@ public class AnimGLEventListener extends AnimListener {
     }
 
     private void burningFuel() {
-        if (tank > 0) tank--;
+        if (tank > 0) {}//tank--;
         if (tank <= 0)             {
-            lives--;
+//            lives--;
             tank=plane.getMaxFuel();
             Sound("mixkit-sad-game-over-trombone-471.wav");
             planeXPosition = maxWidth / 2;
@@ -247,18 +247,18 @@ public class AnimGLEventListener extends AnimListener {
     }
 
 
-    private void blocksCollision(int i) {
-        if ((transXcoordinates(planeXPosition) >= xbr[i] - 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3) || (transXcoordinates(planeXPosition) <= xbl[i] + 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3)) {
-            {
-                lives--;
-                tank=plane.getMaxFuel();
-                Sound("mixkit-sad-game-over-trombone-471.wav");
-                planeXPosition = maxWidth / 2;
-                if (lives <= 0) isExist = false;
-            }
-
-        }
-    }
+//    private void blocksCollision(int i) {
+//        if ((transXcoordinates(planeXPosition) >= xbr[i] - 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3) || (transXcoordinates(planeXPosition) <= xbl[i] + 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3)) {
+//            {
+//                lives--;
+//                tank=plane.getMaxFuel();
+//                Sound("mixkit-sad-game-over-trombone-471.wav");
+//                planeXPosition = maxWidth / 2;
+//                if (lives <= 0) isExist = false;
+//            }
+//
+//        }
+//    }
 
 
     private void generateBlocks(int i) {
@@ -284,7 +284,7 @@ public class AnimGLEventListener extends AnimListener {
             drawLeftBlocks(gl, xbl[i], ybr[i]);
             blocksSpeed(i);
             generateBlocks(i);
-            blocksCollision(i);
+//            blocksCollision(i);
 
             if (ybr[i] >= 0.575 && counter2 >= (int) ((Math.random() * 400) + 700)) {
                 xbr[i] = 0.03;
@@ -521,8 +521,8 @@ public class AnimGLEventListener extends AnimListener {
     private void resolvePlaneCollision(GL gl) {
         for (Enemies Enemies : firstEnemy) {
             if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
-                lives--;
-                Sound("mixkit-sad-game-over-trombone-471.wav");
+//                lives--;
+//                Sound("mixkit-sad-game-over-trombone-471.wav");
                 drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                 Enemies.create = false;
                 planeXPosition = maxWidth / 2;
@@ -532,8 +532,8 @@ public class AnimGLEventListener extends AnimListener {
         }
         for (Enemies2 Enemies : secondEnemy) {
             if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
-                lives--;
-                Sound("mixkit-sad-game-over-trombone-471.wav");
+//                lives--;
+//                Sound("mixkit-sad-game-over-trombone-471.wav");
                 drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                 Enemies.create = false;
                 planeXPosition = maxWidth / 2;

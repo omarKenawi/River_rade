@@ -17,11 +17,11 @@ import java.io.IOException;
 public class HomeEntryPage extends AnimListener implements GLEventListener, ActionListener {
    public int count = 0;
 
-    AnimGLEventListener ar;
+    NormalGame ar;
 
     {
 
-        ar = new AnimGLEventListener();
+        ar = new NormalGame();
     }
 
    String name ="";
@@ -37,8 +37,8 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 //
 
     private final JFrame frame;
-    private final JButton startButton;
-    private final JButton optionsButton;
+    private final JButton normalGame;
+    private final JButton hackerMode;
     private final JButton HelpButton;
     private final JButton exitButton;
     private final JButton instruction;
@@ -57,13 +57,13 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         // Set up the buttons
         instruction = new JButton ( "instraction" );
         instruction.addActionListener(this);
-        startButton = new JButton("Start Game");
-        startButton.addActionListener(this);
-        optionsButton = new JButton("Levels");
-        optionsButton.addActionListener(this);
-        JButton chooseplaneButton = new JButton(" " + "Choose a plane ");
-        chooseplaneButton.addActionListener(this);
-        chooseplaneButton.setVisible(false);
+        normalGame = new JButton("normal Game");
+        normalGame.addActionListener(this);
+        hackerMode = new JButton("hacker Mode");
+        hackerMode.addActionListener(this);
+        JButton choosePlaneButton = new JButton(" " + "Choose a plane ");
+        choosePlaneButton.addActionListener(this);
+        choosePlaneButton.setVisible(false);
         HelpButton = new JButton("Info");
         HelpButton.addActionListener(this);
         exitButton = new JButton("Exit");
@@ -71,9 +71,9 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.BLUE);
         buttonPanel.setSize(530, 450);
-        buttonPanel.add(startButton);
-        buttonPanel.add(optionsButton);
-        buttonPanel.add(chooseplaneButton);
+        buttonPanel.add(normalGame);
+        buttonPanel.add(hackerMode);
+        buttonPanel.add(choosePlaneButton);
 
         buttonPanel.add(HelpButton);
         buttonPanel.add(instruction);
@@ -95,13 +95,13 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
     public void actionPerformed(ActionEvent e) {
 
         Object source = e.getSource();
-        if (source == startButton) {
-            // Start the game
+        if (source == normalGame) {
+            // Start normal game
 
               name=JOptionPane.showInputDialog(frame,"Enter Your Name");
             HelpButton.setVisible(false);
             instruction.setVisible(false);
-            optionsButton.setVisible(false);
+            hackerMode.setVisible(false);
             frame. setVisible(false);
 
             String s = "HI  "+name+" Are you ready ?";
@@ -109,7 +109,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             if ( response==JOptionPane.YES_OPTION) {
                 Anim f;
 
-                    f = new Anim(new AnimGLEventListener( ));
+                    f = new Anim(new NormalGame( ));
 
                 newGame();
                 f.setVisible(true);
@@ -117,13 +117,40 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
             }
 
+
             if (response==JOptionPane.NO_OPTION) {
                 new HomeEntryPage();
                 frame. dispose();
             }
 
-        }
-        else if (e.getSource() == instruction) {
+        } else if (e.getSource() == hackerMode) {
+            name=JOptionPane.showInputDialog(frame,"Enter Your Name");
+            HelpButton.setVisible(false);
+            instruction.setVisible(false);
+            hackerMode.setVisible(false);
+            frame. setVisible(false);
+
+            String s = "HI  "+name+" Are you ready ?";
+            int     response = JOptionPane.showConfirmDialog(frame,  s  , "ready?", JOptionPane.YES_NO_OPTION);
+            if ( response==JOptionPane.YES_OPTION) {
+                Anim f;
+
+                f = new Anim(new hackerMode( ));
+
+                newGame();
+                f.setVisible(true);
+                frame. dispose();
+
+            }
+
+
+            if (response==JOptionPane.NO_OPTION) {
+                new HomeEntryPage();
+                frame. dispose();
+            }
+
+
+        } else if (e.getSource() == instruction) {
 
             JOptionPane.showMessageDialog(frame,
                     "1.Use the left right button to move the plane \n"
