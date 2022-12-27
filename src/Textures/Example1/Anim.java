@@ -26,7 +26,7 @@ public class Anim extends JFrame {
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
-        animator = new FPSAnimator(60);
+        animator = new FPSAnimator(40);
         animator.add(glcanvas);
         animator.start();
 

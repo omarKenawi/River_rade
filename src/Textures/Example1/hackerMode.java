@@ -24,7 +24,6 @@ public class hackerMode extends AnimListener {
     private static long lastBenzine = 0;
     private static long lastEnemy1 = 0, lastEnemy2 = 0;
     private final double planeYPosition = 10;
-    private int addLives=0;
     //-----------------------------------------generate--------------------------------------//
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
@@ -156,15 +155,9 @@ public class hackerMode extends AnimListener {
         removeBenzine();
         displayVar(g, gld);
         distance();
-        updateLives();
         EndGame();
     }
-    private void updateLives(){
-        if (score/100!=addLives) {
-            lives++;
-            addLives++;
-        }
-    }
+
 
     private void displayVar(GLUT g, GLAutoDrawable gld) {
         GL gl2 = gld.getGL();
@@ -174,8 +167,6 @@ public class hackerMode extends AnimListener {
         g.glutBitmapString(5, Integer.toString(score));
         gl2.glRasterPos2f(-.8f, .84f);
         g.glutBitmapString(5, "tank  OO");
-
-//        g.glutBitmapString(5, Integer.toString(tank / 17));
         gl2.glRasterPos2f(-.8f, .77f);
         g.glutBitmapString(5, "Timer  ");
 
@@ -560,11 +551,6 @@ public class hackerMode extends AnimListener {
                 bullets.add(new Bullet(planeXPosition, planeYPosition, 1500));
                 Sound("GunShotSnglShotIn PE1097906.wav");
             }
-        }
-        if (isKeyPressed((KeyEvent.VK_F))){
-            JOptionPane.showMessageDialog(null, "you find the bug free game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
-            System.exit(0);
-
         }
     }
 

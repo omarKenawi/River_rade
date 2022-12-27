@@ -159,7 +159,7 @@ public class EasyGame extends AnimListener {
         EndGame();
     }
     private void updateLives(){
-        if (score/100!=addLives) {
+        if (score/2000!=addLives) {
             lives++;
             addLives++;
         }
@@ -472,7 +472,6 @@ public class EasyGame extends AnimListener {
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                     score += 10;
-                    tank=plane.getMaxFuel();
                     break outer;
                 }
             }
@@ -481,8 +480,7 @@ public class EasyGame extends AnimListener {
             for (Bullet bullet : bullets) {
                 if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
                     Sound("explosion-6055.wav");
-                    tank=plane.getMaxFuel();
-                    Enemies.create = false;
+                     Enemies.create = false;
                     bullet.fired = false;
                     drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
                     score += 50;
@@ -613,12 +611,6 @@ public class EasyGame extends AnimListener {
                 bullets.add(new Bullet(planeXPosition, planeYPosition, 1500));
                 Sound("GunShotSnglShotIn PE1097906.wav");
             }
-        }
-        if (isKeyPressed((KeyEvent.VK_F))){
-            System.out.println("you find the free bug");
-            JOptionPane.showMessageDialog(null, "game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
-            System.exit(0);
-
         }
     }
 

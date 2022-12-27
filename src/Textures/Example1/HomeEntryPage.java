@@ -105,6 +105,11 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             // Start normal game
 
               name=JOptionPane.showInputDialog(frame,"Enter Your Name");
+              if(name==null){
+                  new HomeEntryPage();
+                  frame. dispose();
+                    return;
+              }
             HelpButton.setVisible(false);
             instruction.setVisible(false);
             hackerMode.setVisible(false);
@@ -206,7 +211,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
         }else if (source == HelpButton) {
 
-            JOptionPane.showMessageDialog(frame,  " team members\n"+"1- omar kenawi\n"+"2-ali yasser\n"+"3-Abdelrahman ibrahem \n");
+            JOptionPane.showMessageDialog(frame,  " team members\n"+"1- omar kenawi\n"+"2-ali yasser\n"+"3-Abdelrahman ibrahem \n"+"4-ali nasser \n"+"4-mounir maged\n");
         }
 
     }
