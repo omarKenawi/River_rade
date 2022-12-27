@@ -19,11 +19,13 @@ import java.util.BitSet;
 
 public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 1000;
+    private static final long createEnemies2 = 1346;
     private static final long createBenzine = 5357;
     private long counter=0;
 
     private static long lastBenzine = 0;
-    private static long lastEnemy = 0;
+    private static long lastEnemy1 = 0,lastEnemy2=0;
+    boolean choose = true;
     //-----------------------------------------generate--------------------------------------//
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
@@ -31,7 +33,8 @@ public class AnimGLEventListener extends AnimListener {
     plane1 plane = new plane1();
     int tank = plane.getMaxFuel();
     boolean isExist = plane.isExist();
-    Enemies entity = new Enemies();
+    Enemies FirstEnemies = new Enemies();
+    Enemies2 secondEnemies = new Enemies2();
     GLUT g = new GLUT();
     //--------------------------------------------------------------------------------------//
     int maxWidth = 110;
@@ -40,32 +43,16 @@ public class AnimGLEventListener extends AnimListener {
     double[] ybc = {0.7, 0.625, 0.55, 0.475, 0.4, 0.325, 0.25, 0.175, 0.1, 0.025, -0.05, -0.125, -0.2, -0.275, -0.35, -0.425, -0.5, -0.575, -0.65, -0.725};
     double[] xbr = {0.54, 0.6, 0.53, 0.55, 0.53, 0.57, 0.6, 0.56, 0.59, 0.54, 0.55, 0.58, 0.55, 0.6, 0.59, 0.53, 0.54, 0.58, 0.53, 0.6};
     double[] xbl = {-0.55, -0.55, -0.53, -0.6, -0.56, -0.6, -0.57, -0.55, -0.59, -0.56, -0.54, -0.6, -0.57, -0.53, -0.55, -0.6, -0.6, -0.57, -0.53, -0.55};
-    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), entity.getFirstPic(), entity.getSecendPic(), "block.png", ben.getFirstPic()};
+    //                        0                   1                       2                        3                       4                     5                         6                                      7                     8            9
+    String[] textureNames = {plane.getFirstPic(), plane.getSecendPic(), plane.getTriedPic(), plane.getPlaneBoomed(), plane.getBulletPic(), FirstEnemies.getFirstPic(), FirstEnemies.getSecendPic(),secondEnemies.getFirstPic(), "block.png", ben.getFirstPic()};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
-    ArrayList<Enemies> Enemies = new ArrayList<>();
+    ArrayList<Enemies> firstEnemy = new ArrayList<>();
+    ArrayList<Enemies2> secondEnemy = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
     ArrayList<Benzin> benzine = new ArrayList<>();
     int counter2 = 1;
     int counter1 = 100;
-//    File gameBegan = new File("Assets/dramatic-reveal-21469.wav");
-//    File gamePlay = new File("Assets/commercial-aircraft-in-flight-announcement-5-17499.wav");
-//    File shot = new File("Assets/laser-zap-90575.wav");
-//    File hit = new File("Assets/explosion-6055.wav");
-//    File Crash = new File("Assets/crash-7075.wav");
-//    File gameOver = new File("Assets/mixkit-sad-game-over-trombone-471.wav");
-//    AudioInputStream gameBeganAudioStream = AudioSystem.getAudioInputStream(gameBegan);
-//    AudioInputStream gamePlayAudioStream = AudioSystem.getAudioInputStream(gamePlay);
-//    AudioInputStream shotAudioStream = AudioSystem.getAudioInputStream(shot);
-//    AudioInputStream hitAudioStream = AudioSystem.getAudioInputStream(hit);
-//    AudioInputStream crashAudioStream = AudioSystem.getAudioInputStream(Crash);
-//    AudioInputStream gameOverAudioStream = AudioSystem.getAudioInputStream(gameOver);
-//    Clip gameBeganClip = AudioSystem.getClip();
-//    Clip gamePlayClip = AudioSystem.getClip();
-//    Clip chotClip = AudioSystem.getClip();
-//    Clip shotClip = AudioSystem.getClip();
-//    Clip clipHit = AudioSystem.getClip();
-//    Clip gameOverClip = AudioSystem.getClip();
     private int score = 0;
     private long lastBulletFired = 0;
     private double planeXPosition = maxWidth / 2.0;
@@ -145,30 +132,29 @@ newGame();
 
 
     public void display(GLAutoDrawable gld) {
-        GL gl = gld.getGL();
-        gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
-        gl.glLoadIdentity();
-        moveEnemies();
-        moveBullets();
-        moveBenzine();
-        handleKeyPress();
-        drawPlane(gl, planeXPosition, animationIndex);
-        CreateEnemies(gl);
-        Benzine(gl);
-        burningFuel();
-        generateBullets(gl);
-        resolveBulletCollision(gl);
-        resolvePlaneCollision();
-        resolveBenzineCollision();
-        removeEnemies();
-        removeBullets();
-        removeBenzine();
-        drawMap(gl);
-        displayVar(g,gld);
-        distance();
-        EndGame();
-
+            GL gl = gld.getGL();
+            gl.glClearColor(0.0f, 0.5f, 0.9f, 0.0f);
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
+            gl.glLoadIdentity();
+            drawMap(gl);
+            moveEnemies();
+            moveBullets();
+            moveBenzine();
+            handleKeyPress();
+            drawPlane(gl, planeXPosition, animationIndex);
+            CreateEnemies(gl);
+            Benzine(gl);
+            burningFuel();
+            generateBullets(gl);
+            resolveBulletCollision(gl);
+            resolvePlaneCollision();
+            resolveBenzineCollision();
+            removeEnemies();
+            removeBullets();
+            removeBenzine();
+            displayVar(g, gld);
+            distance();
+            EndGame();
     }
     private void displayVar(GLUT g,GLAutoDrawable gld){
         GL gl2 = gld.getGL();
@@ -207,7 +193,7 @@ newGame();
         }
         for (Benzin ben : benzine) {
             ben.validate();
-            drawSprite(gl, ben.x, ben.y, 8, 1);
+            drawSprite(gl, ben.x, ben.y, 9, 1);
         }
 
 
@@ -314,25 +300,40 @@ newGame();
     }
 
     private void moveEnemies() {
-        for (Textures.Example1.Enemies enemy : Enemies) {
+        for (Textures.Example1.Enemies enemy : firstEnemy) {
             enemy.y -= 1;
+        }
+        for (Textures.Example1.Enemies2 enemy : secondEnemy) {
+            enemy.y -= 1;
+            enemy.x+=3;
+            enemy.x%=110;
+
         }
 
 
     }
 
     private void removeEnemies() {
-        Enemies.removeIf(b -> !b.create);
+        firstEnemy.removeIf(b -> !b.create);
+        secondEnemy.removeIf(b -> !b.create);
     }
 
 
     //                       drow methods
     private void CreateEnemies(GL gl) {
-        if (lastEnemy + createEnemies < System.currentTimeMillis()) {
-            lastEnemy = System.currentTimeMillis();
-            Enemies.add(new Enemies(10 + ((int) (Math.random() * 80)), 0, 2 * 2600));
+        if (choose) {
+            if (lastEnemy1 + createEnemies < System.currentTimeMillis()) {
+                lastEnemy1 = System.currentTimeMillis();
+                firstEnemy.add(new Enemies(10 + ((int) (Math.random() * 80)), 0, 2 * 2600));
+                choose = false;
+            }
         }
-        for (Enemies enemies : Enemies) {
+        else if (lastEnemy2 + createEnemies2 < System.currentTimeMillis()) {
+            lastEnemy2 = System.currentTimeMillis();
+            secondEnemy.add(new Enemies2( 0, +20, 2 * 2600));
+            choose=true;
+        }
+        for (Enemies enemies : firstEnemy) {
             enemies.validate();
             int direction = (int) ( Math.random() * 2 +1);
             if (direction==1&&enemies.y==110) {
@@ -340,13 +341,18 @@ newGame();
             } else if (direction==2&&enemies.y==110) {
                 enemies.isRight = false;
             }
-            drawEnemies(gl, enemies.x, enemies.y, 6, 1,enemies.isRight);
+            drawFirstEnemies(gl, enemies.x, enemies.y, 6, 1,enemies.isRight);
+
+        }
+        for (Enemies2 enemies : secondEnemy) {
+            enemies.validate();
+            drawSprite(gl, enemies.x, enemies.y, 7, 1);
 
         }
 
 
     }
-    public void drawEnemies(GL gl, double x, double y, int index, float scale,boolean right) {
+    public void drawFirstEnemies(GL gl, double x, double y, int index, float scale, boolean right) {
         if (right)
             if (index==5)
                index++;
@@ -444,7 +450,7 @@ newGame();
     //collision between bullet and ship
     private void resolveBulletCollision(GL gl) {
         outer:
-        for (Enemies Enemies : Enemies) {
+        for (Enemies Enemies : firstEnemy) {
             for (Bullet bullet : bullets) {
                 if ((bullet.x >= (Enemies.x - 9) && (bullet.x) <= (Enemies.x + 8)) && ((bullet.y >= (Enemies.y - 1) && (bullet.y) <= (Enemies.y + 2)))) {
                     Sound("explosion-6055.wav");
@@ -465,7 +471,7 @@ newGame();
                     bullet.fired = false;
                     Sound("explosion-6055.wav");
                     drawSprite(gl, fuel.x, fuel.y, 3, 3f);
-                    for (Enemies Enemies : Enemies) {
+                    for (Enemies Enemies : firstEnemy) {
                         if (zone(Enemies.x, Enemies.y, fuel.x, fuel.y) <= 30.0) {
                             Enemies.create = false;
                             score += 20;
@@ -483,7 +489,7 @@ newGame();
 
     }
     private void resolvePlaneCollision() {
-        for (Enemies Enemies : Enemies) {
+        for (Enemies Enemies : firstEnemy) {
             if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4)
                     || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)
             ) {
@@ -575,7 +581,7 @@ newGame();
         }
     }
     private void distance() {
-        for (Enemies Enemies : Enemies) {
+        for (Enemies Enemies : firstEnemy) {
             System.out.println("Enemies.x" + Enemies.x);
             if (Enemies.y - planeYPosition < 90) {
                 if (Enemies.isRight) {

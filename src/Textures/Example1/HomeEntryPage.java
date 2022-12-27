@@ -82,9 +82,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         canvas.addGLEventListener(this);
         frame.add(canvas, BorderLayout.CENTER);
         animator = new FPSAnimator(canvas, FPS);
-
         // Set up the buttons
-
         instraction  = new JButton ( "instraction" );
         instraction.addActionListener(this);
         startButton = new JButton("Start Game");
@@ -92,19 +90,13 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         optionsButton = new JButton("Levels");
         optionsButton.addActionListener(this);
         ChooseplaneButton = new JButton(" "+ "Choose a plane ");
-
         ChooseplaneButton.addActionListener(this);
         ChooseplaneButton.setVisible(false);
         HelpButton = new JButton("Info");
         HelpButton.addActionListener(this);
-
         exitButton = new JButton("Exit");
         exitButton.addActionListener(this);
-
         JPanel buttonPanel = new JPanel();
-//    instraction.setBackground(Color.GRAY);
-//     startButton .setBackground(Color.white);
-//
         buttonPanel.setBackground(Color.BLUE);
         buttonPanel.setSize(530, 450);
         buttonPanel.add(startButton);
