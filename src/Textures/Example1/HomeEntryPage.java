@@ -126,8 +126,11 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         else if (e.getSource() == instraction) {
 
             JOptionPane.showMessageDialog(frame,
-                    "1.Use the up down left right bottun to move the plane \n"
-                            + "2.press Space to shoot bults.\n"
+                    "1.Use the left right button to move the plane \n"
+                            + "2.press Space to shoot bullets.\n"
+                            +"10 points for hit first enemy (ship)\n "
+                            +"50 points for hit second enemy (plane)\n "
+                            +"if hit fuel every enemy in it is zone will destroyed\n"+" and  you will git 30 points\n "
                             +"3.Try to survive and overcome the enemy."
             );
 
@@ -138,7 +141,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
         }else if (source == HelpButton) {
 
-            JOptionPane.showMessageDialog(frame,  "");
+            JOptionPane.showMessageDialog(frame,  " team members\n"+"1- omar kenawi\n"+"2-ali yasser\n"+"3-Abdelrahman ibrahem\n");
         }
 
     }
