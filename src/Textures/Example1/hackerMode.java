@@ -236,7 +236,6 @@ public class hackerMode extends AnimListener {
     }
 
     private void burningFuel() {
-        if (tank > 0) {}//tank--;
         if (tank <= 0)             {
 //            lives--;
             tank=plane.getMaxFuel();
@@ -245,20 +244,6 @@ public class hackerMode extends AnimListener {
             if (lives <= 0) isExist = false;
         }
     }
-
-
-//    private void blocksCollision(int i) {
-//        if ((transXcoordinates(planeXPosition) >= xbr[i] - 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3) || (transXcoordinates(planeXPosition) <= xbl[i] + 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3)) {
-//            {
-//                lives--;
-//                tank=plane.getMaxFuel();
-//                Sound("mixkit-sad-game-over-trombone-471.wav");
-//                planeXPosition = maxWidth / 2;
-//                if (lives <= 0) isExist = false;
-//            }
-//
-//        }
-//    }
 
 
     private void generateBlocks(int i) {
@@ -306,7 +291,6 @@ public class hackerMode extends AnimListener {
         javax.swing.Timer timer = new Timer(900, e -> {
             //start counter in text field
             counter++;
-            System.out.println(counter);
 
         });
         timer.start();
@@ -338,7 +322,7 @@ public class hackerMode extends AnimListener {
     }
 
 
-    //                       drow methods
+    //                       draw methods
     private void CreateEnemies(GL gl) {
         if (choose) {
             if (lastEnemy1 + createEnemies < System.currentTimeMillis()) {
@@ -430,13 +414,13 @@ public class hackerMode extends AnimListener {
     private void generateBullets(GL gl) {
         for (Bullet bullet : bullets) {
             bullet.invalidate();
-            drowBullet(gl, bullet.x, bullet.y);
+            drawBullet(gl, bullet.x, bullet.y);
         }
 
     }
 
 
-    private void drowBullet(GL gl, double x, double y) {
+    private void drawBullet(GL gl, double x, double y) {
         gl.glEnable(GL.GL_BLEND);
         //-----------------------------------------bullet--------------------------------------//
         int bulletIndex = 4;
@@ -518,32 +502,6 @@ public class hackerMode extends AnimListener {
 
     }
 
-    private void resolvePlaneCollision(GL gl) {
-        for (Enemies Enemies : firstEnemy) {
-            if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
-//                lives--;
-//                Sound("mixkit-sad-game-over-trombone-471.wav");
-                drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
-                Enemies.create = false;
-                planeXPosition = maxWidth / 2;
-                tank=plane.getMaxFuel();
-                if (lives <= 0) isExist = false;
-            }
-        }
-        for (Enemies2 Enemies : secondEnemy) {
-            if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
-//                lives--;
-//                Sound("mixkit-sad-game-over-trombone-471.wav");
-                drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
-                Enemies.create = false;
-                planeXPosition = maxWidth / 2;
-                if (lives <= 0) isExist = false;
-            }
-        }
-
-
-    }
-
     private void drawBlocks(GL gl, double x, double y) {
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length - 2]);    // Turn Blending On
@@ -580,34 +538,20 @@ public class hackerMode extends AnimListener {
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public double transXcoordinates(double x) {
-        if (x >= 50 && x <= 100) {
-            return (x / 100) - 0.5;
-        }
-        return -0.5 + (x / 100);
-    }
 
-    public double transYcoordinates(double y) {
-        if (y >= 50 && y <= 100) {
-            return (y / 100) - 0.5;
-        }
-        return -0.5 + (y / 100);
-
-    }
-
-    // handel palne movement
+    // handel plane movement
 
     public void handleKeyPress() {
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
             animationIndex = 2;
-            double leftXPlaneBoundry = 0;
-            if (planeXPosition > leftXPlaneBoundry) planeXPosition -= plane.getPlaneSpeed();
-            if (planeXPosition < leftXPlaneBoundry) planeXPosition = leftXPlaneBoundry;
+            double leftXPPlaneBoundary = 0;
+            if (planeXPosition > leftXPPlaneBoundary) planeXPosition -= plane.getPlaneSpeed();
+            if (planeXPosition < leftXPPlaneBoundary) planeXPosition = leftXPPlaneBoundary;
         } else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
             animationIndex = 1;
-            double rightXPlaneBoundry = 100;
-            if (planeXPosition < rightXPlaneBoundry) planeXPosition += plane.getPlaneSpeed();
-            if (planeXPosition > rightXPlaneBoundry) planeXPosition = rightXPlaneBoundry;
+            double rightXPPlaneBoundary = 100;
+            if (planeXPosition < rightXPPlaneBoundary) planeXPosition += plane.getPlaneSpeed();
+            if (planeXPosition > rightXPPlaneBoundary) planeXPosition = rightXPPlaneBoundary;
         }
         if (isKeyPressed(KeyEvent.VK_SPACE)) {
             long fireRate = 500;
@@ -618,8 +562,7 @@ public class hackerMode extends AnimListener {
             }
         }
         if (isKeyPressed((KeyEvent.VK_F))){
-            System.out.println("you find the free bug");
-            JOptionPane.showMessageDialog(null, "game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "you find the bug free game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
             System.exit(0);
 
         }
@@ -627,7 +570,6 @@ public class hackerMode extends AnimListener {
 
     private void distance() {
         for (Enemies Enemies : firstEnemy) {
-            System.out.println("Enemies.x" + Enemies.x);
             if (Enemies.y - planeYPosition < 90) {
                 if (Enemies.isRight) {
                     ++Enemies.x;

@@ -192,7 +192,6 @@ public class NormalGame extends AnimListener {
 
     private void EndGame() {
         if (!isExist) {
-            System.out.println("GameOver");
             JOptionPane.showMessageDialog(null, "GameOver.", "GameOver", JOptionPane.WARNING_MESSAGE);
             System.exit(0);
         }
@@ -306,7 +305,6 @@ public class NormalGame extends AnimListener {
         javax.swing.Timer timer = new Timer(900, e -> {
             //start counter in text field
             counter++;
-            System.out.println(counter);
 
         });
         timer.start();
@@ -618,8 +616,7 @@ public class NormalGame extends AnimListener {
             }
         }
         if (isKeyPressed((KeyEvent.VK_F))){
-            System.out.println("you find the free bug");
-            JOptionPane.showMessageDialog(null, "game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "you find the free bug game failed successfully.", "GameOver", JOptionPane.WARNING_MESSAGE);
             System.exit(0);
 
         }
@@ -627,7 +624,6 @@ public class NormalGame extends AnimListener {
 
     private void distance() {
         for (Enemies Enemies : firstEnemy) {
-            System.out.println("Enemies.x" + Enemies.x);
             if (Enemies.y - planeYPosition < 90) {
                 if (Enemies.isRight) {
                     ++Enemies.x;

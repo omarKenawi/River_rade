@@ -39,6 +39,8 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
     private final JFrame frame;
     private final JButton normalGame;
     private final JButton hackerMode;
+    private  JButton easyGame;
+
     private final JButton HelpButton;
     private final JButton exitButton;
     private final JButton instruction;
@@ -61,6 +63,8 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         normalGame.addActionListener(this);
         hackerMode = new JButton("hacker Mode");
         hackerMode.addActionListener(this);
+        easyGame = new JButton("easy Game");
+        easyGame.addActionListener(this);
         JButton choosePlaneButton = new JButton(" " + "Choose a plane ");
         choosePlaneButton.addActionListener(this);
         choosePlaneButton.setVisible(false);
@@ -73,6 +77,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         buttonPanel.setSize(530, 450);
         buttonPanel.add(normalGame);
         buttonPanel.add(hackerMode);
+        buttonPanel.add(easyGame);
         buttonPanel.add(choosePlaneButton);
 
         buttonPanel.add(HelpButton);
@@ -110,7 +115,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             if ( response==JOptionPane.YES_OPTION) {
                 Anim f;
 
-                    f = new Anim(new NormalGame( ));
+                    f = new Anim(new NormalGame());
 
                 newGame();
                 f.setVisible(true);
@@ -153,7 +158,37 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             }
 
 
-        } else if (e.getSource() == instruction) {
+        }
+        else if (e.getSource() == easyGame) {
+            name=JOptionPane.showInputDialog(frame,"Enter Your Name");
+            HelpButton.setVisible(false);
+            instruction.setVisible(false);
+            hackerMode.setVisible(false);
+            frame. setVisible(false);
+
+            String s = "HI  "+name+" Are you ready ?";
+            int     response = JOptionPane.showConfirmDialog(frame,  s  , "ready?", JOptionPane.YES_NO_OPTION);
+            if ( response==JOptionPane.YES_OPTION) {
+                Anim f;
+
+                f = new Anim(new EasyGame( ));
+
+                newGame();
+                f.setVisible(true);
+                f.setResizable(false);
+                frame. dispose();
+
+            }
+
+
+            if (response==JOptionPane.NO_OPTION) {
+                new HomeEntryPage();
+                frame. dispose();
+            }
+
+
+        }
+        else if (e.getSource() == instruction) {
 
             JOptionPane.showMessageDialog(frame,
                     "1.Use the left right button to move the plane \n"
@@ -171,7 +206,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
         }else if (source == HelpButton) {
 
-            JOptionPane.showMessageDialog(frame,  " team members\n"+"1- omar kenawi\n"+"2-ali yasser\n"+"3-Abdelrahman ibrahem\n");
+            JOptionPane.showMessageDialog(frame,  " team members\n"+"1- omar kenawi\n"+"2-ali yasser\n"+"3-Abdelrahman ibrahem \n");
         }
 
     }
