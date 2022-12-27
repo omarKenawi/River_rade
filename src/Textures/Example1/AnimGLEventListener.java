@@ -3,13 +3,14 @@ package Textures.Example1;
 import Textures.AnimListener;
 import Textures.TextureReader;
 import com.sun.opengl.util.GLUT;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.util.BitSet;
 public class AnimGLEventListener extends AnimListener {
     private static final long createEnemies = 1000;
     private static final long createBenzine = 5357;
-    private Timer Timer;
     private long counter=0;
 
     private static long lastBenzine = 0;
@@ -179,7 +179,7 @@ newGame();
         gl2.glRasterPos2f(-.8f, .8f);
         g.glutBitmapString(5, "tank  ");
 
-        g.glutBitmapString(5, Integer.toString(tank/10));
+        g.glutBitmapString(5, Integer.toString(tank/17));
         gl2.glRasterPos2f(-.8f, .7f);
         g.glutBitmapString(5, "Timer  ");
 
@@ -298,16 +298,14 @@ newGame();
 
     }
     public void newGame() {
-        Timer = new Timer(900, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //start counter in text field
-                counter++;
-                System.out.println(counter);
+        //start counter in text field
+        javax.swing.Timer timer = new Timer(900, e -> {
+            //start counter in text field
+            counter++;
+            System.out.println(counter);
 
-            }
         });
-        Timer.start();
+        timer.start();
     }
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }

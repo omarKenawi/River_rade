@@ -5,7 +5,7 @@ public class plane1 {
     private final String secendPic="plane_2.png";
     private final String triedPic="plane_3.png";
     private boolean isExist=true;
-    private final int maxFuel = 1000;
+    private final int maxFuel = 1700;
     private final double planeSpeed = 3;
 
     private final   String planeBoomed="plane_boom.png";
