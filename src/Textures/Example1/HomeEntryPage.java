@@ -89,6 +89,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         // instruction.setVisible(false);
         frame.setVisible(true);
         frame.setSize(900, 1000);
+        frame.setResizable(false);
        // setSize();
     }
 
@@ -113,6 +114,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
                 newGame();
                 f.setVisible(true);
+                f.setResizable(false);
                 frame. dispose();
 
             }
@@ -139,6 +141,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
                 newGame();
                 f.setVisible(true);
+                f.setResizable(false);
                 frame. dispose();
 
             }
