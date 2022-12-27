@@ -35,6 +35,7 @@ public class AnimGLEventListener extends AnimListener {
     Enemies FirstEnemies = new Enemies();
     Enemies2 secondEnemies = new Enemies2();
     GLUT g = new GLUT();
+
     //--------------------------------------------------------------------------------------//
     int maxWidth = 110;
     int maxHeight = 110;
@@ -56,6 +57,7 @@ public class AnimGLEventListener extends AnimListener {
     private int score = 0;
     private long lastBulletFired = 0;
     private double planeXPosition = maxWidth / 2.0;
+    private int lives = plane.getLives();
     private int animationIndex = 0;
 
 
@@ -146,7 +148,7 @@ public class AnimGLEventListener extends AnimListener {
         burningFuel();
         generateBullets(gl);
         resolveBulletCollision(gl);
-        resolvePlaneCollision();
+        resolvePlaneCollision(gl);
         resolveBenzineCollision();
         removeEnemies();
         removeBullets();
@@ -162,14 +164,18 @@ public class AnimGLEventListener extends AnimListener {
         gl2.glRasterPos2f(-.8f, .9f);
         g.glutBitmapString(5, "Score ");
         g.glutBitmapString(5, Integer.toString(score));
-        gl2.glRasterPos2f(-.8f, .8f);
+        gl2.glRasterPos2f(-.8f, .84f);
         g.glutBitmapString(5, "tank  ");
 
         g.glutBitmapString(5, Integer.toString(tank / 17));
-        gl2.glRasterPos2f(-.8f, .7f);
+        gl2.glRasterPos2f(-.8f, .77f);
         g.glutBitmapString(5, "Timer  ");
 
         g.glutBitmapString(5, Long.toString(counter));
+        gl2.glRasterPos2f(-.8f, .7f);
+        g.glutBitmapString(5, "lives  ");
+
+        g.glutBitmapString(5, Long.toString(lives));
 
         gl2.glEnd();
 
@@ -230,8 +236,10 @@ public class AnimGLEventListener extends AnimListener {
     private void blocksCollision(int i) {
         if ((transXcoordinates(planeXPosition) >= xbr[i] - 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3) || (transXcoordinates(planeXPosition) <= xbl[i] + 0.09 && transYcoordinates(planeYPosition) >= ybr[i] && transYcoordinates(planeYPosition) <= ybr[i] + 0.3)) {
             {
+                lives--;
                 Sound("mixkit-sad-game-over-trombone-471.wav");
-                isExist = false;
+                planeXPosition = maxWidth / 2;
+                if (lives <= 0) isExist = false;
             }
 
         }
@@ -273,7 +281,6 @@ public class AnimGLEventListener extends AnimListener {
                 xbl[i] = -0.03;
                 counter1 = 100;
             }
-//            drawCenterBlocks(gl,xbl[i]+0.4,xbr[i]-0.1,ybc[i]+1,1);
 
         }
 
@@ -495,18 +502,25 @@ public class AnimGLEventListener extends AnimListener {
 
     }
 
-    private void resolvePlaneCollision() {
+    private void resolvePlaneCollision(GL gl) {
         for (Enemies Enemies : firstEnemy) {
             if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
-
+                lives--;
                 Sound("mixkit-sad-game-over-trombone-471.wav");
-                isExist = false;
+                drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                Enemies.create = false;
+                planeXPosition = maxWidth / 2;
+                if (lives <= 0) isExist = false;
             }
         }
         for (Enemies2 Enemies : secondEnemy) {
             if ((Enemies.y < planeYPosition + 4 && Enemies.y >= planeYPosition - 4 && Enemies.x < planeXPosition + 4 && Enemies.x >= planeXPosition - 4) || planeYPosition + 4 == Enemies.y && Enemies.x <= (planeXPosition + 9) && Enemies.x >= (planeXPosition - 9)) {
+                lives--;
                 Sound("mixkit-sad-game-over-trombone-471.wav");
-                isExist = false;
+                drawSprite(gl, Enemies.x, Enemies.y, 3, 1.5f);
+                Enemies.create = false;
+                planeXPosition = maxWidth / 2;
+                if (lives <= 0) isExist = false;
             }
         }
 

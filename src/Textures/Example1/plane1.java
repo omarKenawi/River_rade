@@ -5,6 +5,7 @@ public class plane1 {
     private final String secendPic="plane_2.png";
     private final String triedPic="plane_3.png";
     private boolean isExist=true;
+    private int lives =3;
     private final int maxFuel = 1700;
     private final double planeSpeed = 3;
 
@@ -43,5 +44,9 @@ public class plane1 {
 
     public double getPlaneSpeed() {
         return planeSpeed;
+    }
+
+    public int getLives() {
+        return lives;
     }
 }
