@@ -24,6 +24,7 @@ public class AnimGLEventListener extends AnimListener {
     private static long lastBenzine = 0;
     private static long lastEnemy1 = 0, lastEnemy2 = 0;
     private final double planeYPosition = 10;
+    private int addLives=0;
     //-----------------------------------------generate--------------------------------------//
     //-----------------------------------------listener handle-----------------------------------//
     public BitSet keyBits = new BitSet(256);
@@ -155,7 +156,14 @@ public class AnimGLEventListener extends AnimListener {
         removeBenzine();
         displayVar(g, gld);
         distance();
+        updateLives();
         EndGame();
+    }
+    private void updateLives(){
+        if (score/100!=addLives) {
+            lives++;
+            addLives++;
+        }
     }
 
     private void displayVar(GLUT g, GLAutoDrawable gld) {
