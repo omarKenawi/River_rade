@@ -1,7 +1,6 @@
 package Textures.Example1;
 
 import Textures.AnimListener;
-import com.sun.opengl.util.FPSAnimator;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -10,7 +9,9 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class HomeEntryPage extends AnimListener implements GLEventListener, ActionListener {
@@ -26,42 +27,33 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
    String name ="";
     String textureName = "Bground.png";
     Textures.TextureReader.Texture texture;
-    int textureIndex[] = new int[1];
+    int[] textureIndex = new int[1];
 
     private static final int WINDOW_WIDTH = 1000; //640
     private static final int WINDOW_HEIGHT = 900;
 
     private static final String TITLE_STRING = "River Raid ";
-    private static final int FPS = 60;
+//    private static final int FPS = 60;
+//
 
-
-    private Timer Timer;
-
-
-    private JFrame frame;
-    private GLCanvas canvas;
-    private FPSAnimator animator;
-    private JButton startButton;
-    private JButton optionsButton;
-    private JButton ChooseplaneButton;
-    private JButton HelpButton;
-    private JButton exitButton;
-    private     JButton instraction;
+    private final JFrame frame;
+    private final JButton startButton;
+    private final JButton optionsButton;
+    private final JButton HelpButton;
+    private final JButton exitButton;
+    private final JButton instraction;
     public HomeEntryPage() {
         // Set up the JFrame
         frame = new JFrame(TITLE_STRING);
-//    private final JPanel my_main_panel = new JPanel();
-//    JPanel p = new JPanel();
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setBackground(Color.white);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//EXIT_ON_CLOSE
         frame.setLayout(new BorderLayout());
 
         // Set up the GLCanvas and FPSAnimator
-        canvas = new GLCanvas();
+        GLCanvas canvas = new GLCanvas();
         canvas.addGLEventListener(this);
         frame.add(canvas, BorderLayout.CENTER);
-        animator = new FPSAnimator(canvas, FPS);
         // Set up the buttons
         instraction  = new JButton ( "instraction" );
         instraction.addActionListener(this);
@@ -69,9 +61,9 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         startButton.addActionListener(this);
         optionsButton = new JButton("Levels");
         optionsButton.addActionListener(this);
-        ChooseplaneButton = new JButton(" "+ "Choose a plane ");
-        ChooseplaneButton.addActionListener(this);
-        ChooseplaneButton.setVisible(false);
+        JButton chooseplaneButton = new JButton(" " + "Choose a plane ");
+        chooseplaneButton.addActionListener(this);
+        chooseplaneButton.setVisible(false);
         HelpButton = new JButton("Info");
         HelpButton.addActionListener(this);
         exitButton = new JButton("Exit");
@@ -81,7 +73,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         buttonPanel.setSize(530, 450);
         buttonPanel.add(startButton);
         buttonPanel.add(optionsButton);
-        buttonPanel.add(ChooseplaneButton);
+        buttonPanel.add(chooseplaneButton);
 
         buttonPanel.add(HelpButton);
         buttonPanel.add(instraction);
@@ -90,8 +82,6 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         // frame.setSize(140, 290);
         frame.add(buttonPanel, BorderLayout.NORTH);
        frame.setLocationRelativeTo(null);
-//    getContentPane().add(canvas, BorderLayout.CENTER);
-//        getContentPane().add( buttonPanel, BorderLayout.NORTH);
 
         frame.setIconImage(new ImageIcon(
                 "C:\\Users\\Abdou\\Desktop\\icon2.png").getImage());
@@ -117,7 +107,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             String s = "HI  "+name+" Are you ready ?";
             int     response = JOptionPane.showConfirmDialog(frame,  s  , "ready?", JOptionPane.YES_NO_OPTION);
             if ( response==JOptionPane.YES_OPTION) {
-                Anim f= null;
+                Anim f;
 
                     f = new Anim(new AnimGLEventListener( ));
 
@@ -131,31 +121,6 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
                 new HomeEntryPage();
                 frame. dispose();
             }
-
-//            Anim f= null;
-//            try {
-//                f = new Anim(new AnimGLEventListener());
-//            } catch (UnsupportedAudioFileException ex) {
-//                throw new RuntimeException(ex);
-//            } catch (IOException ex) {
-//                throw new RuntimeException(ex);
-//            } catch (LineUnavailableException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//
-//            f.setVisible(true);
-//            frame. dispose();
-
-//                  HomeEntryPage h=new HomeEntryPage();
-//         canvas.removeGLEventListener(h);
-//            canvas.addGLEventListener(ar);
-//            canvas.addKeyListener(ar);
-//             canvas.requestFocus();
-//            setSize(700, 700);
-        } else if (source == optionsButton) {
-            // Show the options menu
-        } else if (source == ChooseplaneButton) {
-            // Show the Chooseplane screen
 
         }
         else if (e.getSource() == instraction) {
@@ -173,7 +138,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
         }else if (source == HelpButton) {
 
-            JOptionPane.showMessageDialog(frame,  " River Raid is ..");
+            JOptionPane.showMessageDialog(frame,  "");
         }
 
     }
@@ -182,9 +147,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         // Set up the OpenGL context here
 
         GL gl = drawable.getGL();
-        //  gl.glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
-        // gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);    //This Will Clear The Background Color To Black
         gl.glClearColor(0.0f, 0.9f, 0.5f, 0.0f); //This Will Clear The Background Color To blue+green
 
 
@@ -208,43 +171,12 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
                     texture.getPixels() // Imagedata
             );
         } catch (IOException e) {
-            System.out.println(e);
+
             e.printStackTrace();
         }
 
     }
-    public void mousePressed(MouseEvent e) {
 
-    }
-
-
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-//    public static void main(String[] args) {
-//        new HomeEntryPage();
-//    }
-
-
-    public void focusGained(FocusEvent e) {
-
-    }
-
-
-    public void focusLost(FocusEvent e) {
-
-    }
 
     @Override
     public void display(GLAutoDrawable glad) {
@@ -309,15 +241,13 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         //      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void newGame() {
-        Timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //start counter in text field
-                count++;
+        //start counter in text field
+        javax.swing.Timer timer = new Timer(1000, e -> {
+            //start counter in text field
+            count++;
 
 
-            }
         });
-        Timer.start();
+        timer.start();
     }
 }
