@@ -41,7 +41,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
     private final JButton optionsButton;
     private final JButton HelpButton;
     private final JButton exitButton;
-    private final JButton instraction;
+    private final JButton instruction;
     public HomeEntryPage() {
         // Set up the JFrame
         frame = new JFrame(TITLE_STRING);
@@ -55,8 +55,8 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         canvas.addGLEventListener(this);
         frame.add(canvas, BorderLayout.CENTER);
         // Set up the buttons
-        instraction  = new JButton ( "instraction" );
-        instraction.addActionListener(this);
+        instruction = new JButton ( "instraction" );
+        instruction.addActionListener(this);
         startButton = new JButton("Start Game");
         startButton.addActionListener(this);
         optionsButton = new JButton("Levels");
@@ -76,7 +76,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         buttonPanel.add(chooseplaneButton);
 
         buttonPanel.add(HelpButton);
-        buttonPanel.add(instraction);
+        buttonPanel.add(instruction);
      //   exitButton.setSize(700, 780);
         buttonPanel.add(exitButton);
         // frame.setSize(140, 290);
@@ -86,7 +86,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
         frame.setIconImage(new ImageIcon(
                 "C:\\Users\\Abdou\\Desktop\\icon2.png").getImage());
 
-        // instraction.setVisible(false);
+        // instruction.setVisible(false);
         frame.setVisible(true);
         frame.setSize(900, 1000);
        // setSize();
@@ -100,7 +100,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
 
               name=JOptionPane.showInputDialog(frame,"Enter Your Name");
             HelpButton.setVisible(false);
-            instraction.setVisible(false);
+            instruction.setVisible(false);
             optionsButton.setVisible(false);
             frame. setVisible(false);
 
@@ -123,7 +123,7 @@ public class HomeEntryPage extends AnimListener implements GLEventListener, Acti
             }
 
         }
-        else if (e.getSource() == instraction) {
+        else if (e.getSource() == instruction) {
 
             JOptionPane.showMessageDialog(frame,
                     "1.Use the left right button to move the plane \n"
